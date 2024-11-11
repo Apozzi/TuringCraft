@@ -547,12 +547,12 @@ export default class GraphSchematics extends React.Component<{}, {
 
     for (let x = - scaledGridSize * extraLines; x < width + scaledGridSize * extraLines; x += scaledGridSize) {
       lines.push(
-        <line key={`v-${x}`} x1={x} y1={-scaledGridSize * extraLines} x2={x} y2={height + scaledGridSize * extraLines} stroke="#453138" strokeWidth="1" />
+        <line key={`v-${x}`} x1={x} y1={-scaledGridSize * extraLines} x2={x} y2={height + scaledGridSize * extraLines} stroke="#1c1c27" strokeWidth="1" />
       );
     }
     for (let y = - scaledGridSize * extraLines; y < height + scaledGridSize * extraLines; y += scaledGridSize) {
       lines.push(
-        <line key={`h-${y}`} x1={-scaledGridSize * extraLines} y1={y} x2={width + scaledGridSize * extraLines} y2={y} stroke="#453138" strokeWidth="1" />
+        <line key={`h-${y}`} x1={-scaledGridSize * extraLines} y1={y} x2={width + scaledGridSize * extraLines} y2={y} stroke="#1c1c27" strokeWidth="1" />
       );
     }
 
@@ -599,7 +599,7 @@ export default class GraphSchematics extends React.Component<{}, {
             </feMerge>
           </filter>
         </defs>
-        <circle cx={0} cy={0} r={vertexRadius} fill={actualVertex === vertex.id ? "#5b3146" : "#21171c"} filter={actualVertex === vertex.id ? "url(#glow)" : ''}/>
+        <circle cx={0} cy={0} r={vertexRadius} fill={actualVertex === vertex.id ? "#5b3146" : "rgb(75 52 63)"} filter={actualVertex === vertex.id ? "url(#glow)" : ''}/>
         <text x={0} y={9} textAnchor="middle" fill="white" fontSize={30}>{vertex.label}</text>
       </g>
     ));

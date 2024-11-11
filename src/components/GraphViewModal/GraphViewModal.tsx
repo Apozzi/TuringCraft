@@ -13,8 +13,8 @@ export default class GraphViewModal extends React.Component<any> {
 
   customStyles = {
     content: {
-      height: '466px',
-      background: 'rgb(49,42,44)',
+      height: '680px',
+      background: 'rgb(42 42 49)',
       border: 'none',
       padding: '0px',
     },

@@ -1,5 +1,5 @@
 .databar {
-    position: fixed;
+    position: absolute;
     height: calc(100% - 300px);
     width: 300px;
     bottom: 37px;
@@ -16,8 +16,8 @@
 
 .databar-show {
     transform: translateX(0px);
-    background-color: #584b4f;
-    border: solid 2px #453138;
+    background-color: #1a1929;
+    border: solid 2px #313245;
 }
 
 .databar-cancel-events {
@@ -30,12 +30,12 @@
 
 h3, h4 {
     font-weight: 400;
-    border-top: solid 2px #67525a;
+    border-top: solid 2px #36364d;;
     padding-top: 4px;
 }
 
 .databar--select {
-    background-color: #21171c;
+    background-color: #10111a;
     color: white;
     padding: 8px;
     font-size: 20px;
@@ -58,7 +58,7 @@ h3, h4 {
 
 .vertex-count {
     font-size: 25px;
-    background-color: #21171c;
+    background-color: #10111a;
     padding-left: 73px;
     padding-right: 73px;
     padding-bottom: 5px;
@@ -93,7 +93,7 @@ ul > li
 
 .databar-topbar {
     height: 50px;
-    background-color: #453138;
+    background-color: #313445;
     border-radius: 7px;
     pointer-events: all;
 }

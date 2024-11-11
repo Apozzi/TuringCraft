@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #34282e;
+  background-color: #0e0e14;
 }
 
 code {
@@ -42,7 +42,7 @@ code {
 .toolbox-button {
   height: 105px;
   width: 105px;
-  background-color: #584b4b;
+  background-color: #353549;
   color: white;
   border: 2px solid #767676;
   margin: 18px 11px;
@@ -53,7 +53,7 @@ code {
 }
 
 .toolbox-button:hover {
-  background-color: #413438;
+  background-color: #48485e;
 }
 
 .vertice {
@@ -62,14 +62,14 @@ code {
   width: 80px; 
   height: 63px; 
   border-radius: 50%; 
-  background-color: #21171c;
+  background-color: rgb(75 52 63);
   cursor: pointer;
 }
 
 .control {
   transform: scale(0.7);
   position: fixed;
-  background: #584b4f;
+  background: #4c4b58;
   width: 140px;
   height: 140px;
   right: 48px;
@@ -80,7 +80,7 @@ code {
 
 .control-center {
     position: absolute;
-    border: 2px solid #453138;
+    border: 2px solid #343145;
     border-radius: 51px;
     width: 48px;
     height: 48px;
@@ -101,7 +101,7 @@ code {
     position: absolute;
     left: 10px;
     top: 49px;
-    color: #453138;
+    color: #343145;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -116,7 +116,7 @@ code {
     position: absolute;
     right: 11px;
     top: 49px;
-    color: #453138;
+    color: #343145;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -131,7 +131,7 @@ code {
     position: absolute;
     left: 55px;
     bottom: 5px;
-    color: #453138;
+    color: #343145;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -146,7 +146,7 @@ code {
     position: absolute;
     left: 56px;
     top: 3px;
-    color: #453138;
+    color: #343145;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;

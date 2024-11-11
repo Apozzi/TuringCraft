@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #453138;
+    background-color: #31313f;
     height: 50px;
     display: flex;
     font-size: calc(10px + 2vmin);
@@ -10,13 +10,13 @@
 .navbar--button {
     font-size: large;
     padding: 10px;
-    border-right: solid #412935 2px;
+    border-right: solid #31313f 2px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
 .navbar--button:hover {
-    background: #483a3a;
+    background: #1a1a23;
     cursor: pointer;
 }
 

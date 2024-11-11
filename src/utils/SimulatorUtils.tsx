@@ -50,8 +50,8 @@ const cloneFunction = (gateId : String) => {
   documentobj.onmousemove = (e: any) => {
     let d = documentobj.getElementById(dragId);
     if (d) {
-        d.style.left = e.pageX - 48 +'px';
-        d.style.top = e.pageY - 48 +'px';
+        d.style.left = e.pageX - 40 +'px';
+        d.style.top = e.pageY - 88 +'px';
     }
   };
   documentobj.querySelector('.toolbox').appendChild( clone );

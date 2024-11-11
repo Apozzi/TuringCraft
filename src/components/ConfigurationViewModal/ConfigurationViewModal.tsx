@@ -24,7 +24,7 @@ export default class ConfigurationViewModal extends React.Component<any, State> 
   customStyles = {
     content: {
       height: '60%',
-      background: 'rgb(49,42,44)',
+      background: 'rgb(42 42 49)',
       border: 'none',
       padding: "0px"
     }

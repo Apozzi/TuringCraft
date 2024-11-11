@@ -10,6 +10,7 @@ import { FormattedMessage, IntlProvider } from 'react-intl';
 import { LOCALES } from './i18n/locales';
 import { Locale, messages } from "./i18n/messages";
 import { Subject } from 'rxjs';
+import TuringMachineTape from './components/TuringMachineTape/TuringMachineTape';
 
 export default class App extends React.Component {
   private static changeLanguageSubject = new Subject<Locale>();
@@ -91,6 +92,7 @@ export default class App extends React.Component {
           </div>
           <GraphSchematics></GraphSchematics>
           <DataBar></DataBar>
+          <TuringMachineTape></TuringMachineTape>
         </IntlProvider>
       </div>
     );

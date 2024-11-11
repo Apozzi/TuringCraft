@@ -23,7 +23,7 @@ export default class CustomVerticeSongViewModal extends React.Component<any, Sta
   customStyles = {
     content: {
       height: '80%',
-      background: 'rgb(49,42,44)',
+      background: 'rgb(42 42 49)',
       border: 'none',
       padding: "0px"
     }

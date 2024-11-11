@@ -1,7 +1,6 @@
 import React from 'react';
 import './NavBar.css';
 import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
-import DetailsViewModal from '../DetailsViewModal/DetailsViewModal';
 import AboutViewModal from '../AboutViewModal/AboutViewModal';
 import CustomVerticeSongViewModal from '../CustomVerticeSongViewModal/CustomVerticeSongViewModal';
 import ConfigurationViewModal from '../ConfigurationViewModal/ConfigurationViewModal';
@@ -64,7 +63,6 @@ export default class NavBar extends React.Component<any> {
   render() {
     return (
       <div className="navbar">
-        <DetailsViewModal></DetailsViewModal>
         <CustomVerticeSongViewModal></CustomVerticeSongViewModal>
         <ConfigurationViewModal></ConfigurationViewModal>
         <AboutViewModal></AboutViewModal>
@@ -124,7 +122,6 @@ export default class NavBar extends React.Component<any> {
             <div className="navbar--arrow-icon">▼</div> <FormattedMessage id={"details"}/>
           </div>
           <div className="subnav--content">
-            <a onClick={() => DetailsViewModal.openModal({})}><FormattedMessage id={"transition_matrix"}/></a>
             <a onClick={() => CustomVerticeSongViewModal.openModal({})}><FormattedMessage id={"custom_sounds"}/></a>
             <a onClick={() => ConfigurationViewModal.openModal({})}><FormattedMessage id={"configurations"}/></a>
           </div>
