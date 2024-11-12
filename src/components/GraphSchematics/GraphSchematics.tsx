@@ -16,6 +16,7 @@ import { TreeLayout } from '../../utils/layouts/TreeLayout';
 import { RadialLayout } from '../../utils/layouts/RadialLayout';
 import { SpectralLayout } from '../../utils/layouts/SpectralLayout';
 import { KamadaKawai } from '../../utils/KamadaKawaiAlgorithm';
+import AddEdgeModal from '../AddEdgeModal/AddEdgeModal';
 
 const debugMode = false;
 
@@ -43,9 +44,15 @@ const initState = {
   vertexHistory: [],
 };
 
+interface TuringTransition {
+  read: string;
+  write: string;
+  move: 'L' | 'R';
+}
+
 interface EdgeWeights {
   [sourceId: number]: {
-    [targetId: number]: number;
+    [targetId: number]: TuringTransition[];
   };
 }
 
@@ -64,13 +71,17 @@ export default class GraphSchematics extends React.Component<{}, {
   draggingVertex: boolean,
   edgeCreationMode: boolean,
   edgeStartVertex: number | null,
-  edgeWeights: EdgeWeights;
   actualVertex: number | null,
   audioContext: AudioContext | null;
   vertexHistory: number[];
   centroid: Vertex | null;
   centroidUpdateCounter: number;
-  config: any
+  config: any;
+  edgeWeights: EdgeWeights;
+  tape: string[];
+  headPosition: number;
+  currentState: number | null;
+  isRunning: boolean;
 }> {
   audioManager: AudioManager;
   private centroidUpdateTimer: any = null;
@@ -85,6 +96,11 @@ export default class GraphSchematics extends React.Component<{}, {
       centroid: null,
       centroidUpdateCounter: 0,
       audioContext: new AudioContext(),
+      edgeWeights: {},
+      tape: ['B'],
+      headPosition: 0,
+      currentState: null,
+      isRunning: false,
       config: {
         speed: 1
       }
@@ -122,10 +138,8 @@ export default class GraphSchematics extends React.Component<{}, {
           if (prevState.edgeWeights[edge.source] !== undefined 
             && Object.keys(prevState.edgeWeights[edge.source]).length === 0) 
             delete prevState.edgeWeights[edge.source];
-          const newEdgeWeights = this.redistributeWeights(prevState.edgeWeights, edge.source, -1);
           return{
             edges: this.state.edges.filter(e => e.source !== edge.source || e.target !== edge.target),
-            edgeWeights: newEdgeWeights
           }});
       });
       let timer : number;
@@ -146,9 +160,7 @@ export default class GraphSchematics extends React.Component<{}, {
               this.playVertexSound(currentVertex);
             });
           }
-          timer = window.setInterval(() => {
-            this.moveToNextVertex();
-          }, 500 * (1 / config.speed));
+          this.startTuringMachine(0, []);
         } else {
           clearInterval(timer);
         }
@@ -254,39 +266,86 @@ export default class GraphSchematics extends React.Component<{}, {
     mounted = true;
   }
 
+  addTransition = (sourceId: number, targetId: number, transition: TuringTransition) => {
+    this.setState(prevState => {
+      const newWeights = { ...prevState.edgeWeights };
+      if (!newWeights[sourceId]) newWeights[sourceId] = {};
+      if (!newWeights[sourceId][targetId]) newWeights[sourceId][targetId] = [];
+      newWeights[sourceId][targetId].push(transition);
+      return { edgeWeights: newWeights };
+    });
+  };
+
+  startTuringMachine = (initialState: number, inputTape: string[]) => {
+    this.setState({
+      currentState: initialState,
+      tape: inputTape,
+      headPosition: 0,
+      isRunning: true,
+      actualVertex: initialState
+    }, this.runMachine);
+  };
+
+  runMachine = async () => {
+    while (this.state.isRunning) {
+      const hasNextStep = this.moveToNextVertex();
+      if (!hasNextStep) {
+        this.setState({ isRunning: false });
+        break;
+      }
+      await new Promise(resolve => setTimeout(resolve, 500 / this.state.config.speed));
+    }
+  };
+
+  stopMachine = () => {
+    this.setState({ isRunning: false });
+  };
+
   moveToNextVertex = () => {
-    const { actualVertex, edges, edgeWeights } = this.state;
+    const { actualVertex, edges, edgeWeights, tape, headPosition } = this.state;
     if (actualVertex === null) return;
+  
+    const currentSymbol = tape[headPosition] || 'B';
+    let transitionFound = false;
+    let nextVertex = null;
+    let selectedTransition = null;
 
     const possibleEdges = edges.filter(edge => edge.source === actualVertex);
-    if (possibleEdges.length === 0) return;
-
-    const totalWeight = possibleEdges.reduce((sum, edge) => {
-      return sum + (edgeWeights[edge.source]?.[edge.target] || 0);
-    }, 0);
-
-    const randomValue = Math.random() * totalWeight;
-    let accumulatedWeight = 0;
-    let nextVertex = null;
-
     for (const edge of possibleEdges) {
-      accumulatedWeight += edgeWeights[edge.source]?.[edge.target] || 0;
-      if (randomValue <= accumulatedWeight) {
+      const transitions = edgeWeights[edge.source]?.[edge.target] || [];
+      const validTransition = transitions.find(transition => transition.read === currentSymbol);
+      if (validTransition) {
         nextVertex = edge.target;
+        selectedTransition = validTransition;
+        transitionFound = true;
         break;
       }
     }
+  
+    if (transitionFound && nextVertex !== null && selectedTransition) {
+      const newTape = [...tape];
+      newTape[headPosition] = selectedTransition.write;
 
-    if (nextVertex !== null) {
+      let newHeadPosition = headPosition;
+      if (selectedTransition.move === 'R') newHeadPosition++;
+      else if (selectedTransition.move === 'L') newHeadPosition = Math.max(0, newHeadPosition - 1);
+      
+      if (newHeadPosition >= newTape.length) {
+        newTape.push('B');
+      }
+
       this.setState(prevState => {
         const updatedVertices = prevState.vertices.map(v => 
-          v.id === nextVertex ? { ...v, visitCount: v.visitCount + 1 } : v
+          v.id === nextVertex ? { ...v, visitCount: (v.visitCount || 0) + 1 } : v
         );
-        GraphSchematicsManager.changeVerticeArray(updatedVertices);
+        
         return {
           actualVertex: nextVertex,
           vertexHistory: [...prevState.vertexHistory, nextVertex],
-          vertices: updatedVertices
+          vertices: updatedVertices,
+          tape: newTape,
+          headPosition: newHeadPosition,
+          currentState: nextVertex
         };
       }, async () => {
         const currentVertex = this.state.vertices.find(v => v.id === nextVertex);
@@ -294,8 +353,12 @@ export default class GraphSchematics extends React.Component<{}, {
           await this.playVertexSound(currentVertex);
         }
       });
+  
       GraphSchematicsManager.setGraphState(this.state);
+      return true;
     }
+  
+    return false;
   };
 
 
@@ -360,9 +423,11 @@ export default class GraphSchematics extends React.Component<{}, {
       if (this.state.edgeStartVertex === null) {
         this.setState({ edgeStartVertex: id });
       } else {
-        this.addEdge(this.state.edgeStartVertex, id);
-        this.setState({ edgeCreationMode: false, edgeStartVertex: null });
-        GraphSchematicsManager.exitEdgeCreationMode();
+        //this.addEdge(this.state.edgeStartVertex, id);
+        // aqui vai a modal
+        AddEdgeModal.openModal({});
+        //this.setState({ edgeCreationMode: false, edgeStartVertex: null });
+        //GraphSchematicsManager.exitEdgeCreationMode();
       }
     } else {
       this.setState({ draggingVertex: true, selectedVertex: id });
@@ -486,36 +551,13 @@ export default class GraphSchematics extends React.Component<{}, {
     this.setState(prevState => {
       const newEdge = { source: sourceId, target: targetId };
       const newEdges = [...prevState.edges, newEdge];
-      const newEdgeWeights = this.redistributeWeights(prevState.edgeWeights, sourceId, targetId);
       return {
-        edges: newEdges,
-        edgeWeights: newEdgeWeights
+        edges: newEdges
       };
     });
     GraphSchematicsManager.setGraphState(this.state);
   };
 
-  redistributeWeights = (currentWeights: EdgeWeights, sourceId: number, targetId: number): EdgeWeights => {
-    const newWeights = { ...currentWeights };
-    if (!newWeights[sourceId]) {
-      newWeights[sourceId] = {};
-    }
-    
-    const sourceWeights = newWeights[sourceId];
-    const isNewEdge = sourceWeights[targetId] === undefined && targetId !== -1;
-    const totalEdges = isNewEdge ? Object.keys(sourceWeights).length + 1 : Object.keys(sourceWeights).length;
-    const newWeight = 1 / totalEdges;
-    
-    Object.keys(sourceWeights).forEach((existingTargetId:any) => {
-      sourceWeights[existingTargetId] = newWeight;
-    });
-    
-    if (isNewEdge) {
-      sourceWeights[targetId] = newWeight;
-    }
-    
-    return newWeights;
-  };
 
   toggleEdgeCreationMode = () => {
     this.setState(prevState => ({
@@ -626,6 +668,11 @@ export default class GraphSchematics extends React.Component<{}, {
     });
   }
 
+  private getTransitionText(source: Vertex, target: Vertex = source) {
+    const transitions = this.state.edgeWeights[source.id]?.[target.id] || [];
+    return transitions.map(t => `${t.read}→${t.write},${t.move}`).join('\n');
+  }
+
   renderNormalEdge(source: Vertex, target: Vertex, index: number, scale: number, angleAdjustment:number, curvature:number, variableCurvature: boolean) {
     const dx = target.x - source.x;
     const dy = target.y - source.y;
@@ -654,8 +701,6 @@ export default class GraphSchematics extends React.Component<{}, {
     const controlY = midY + (targetX - sourceX) * adjustedCurvature;
 
     const path = `M ${sourceX * scale} ${sourceY * scale} Q ${controlX * scale} ${controlY * scale} ${targetX * scale} ${targetY * scale}`;
-
-    const weight = this.state.edgeWeights[source.id]?.[target.id] || 0;
 
     const t = 0.5; 
     const inputX = (1-t)*(1-t)*sourceX + 2*(1-t)*t*controlX + t*t*targetX;
@@ -698,58 +743,13 @@ export default class GraphSchematics extends React.Component<{}, {
           width={30 * scale}
           height={20 * scale}
         >
-          <input
-            type="number"
-            className='input-edge'
-            value={weight}
-            min="0"
-            max="1"
-            onChange={(e) => this.handleEdgeWeightChange(source.id, target.id, Number(e.target.value))}
-            step="0.1"
-            style={{
-              width: '100%',
-              height: '100%',
-              background: 'transparent',
-              border: '0',
-              borderRadius: '4px',
-              textAlign: 'center',
-              fontSize: `${20 * scale}px`,
-              color: 'white',
-              outline: 'none'
-            }}
-          />
+          <div className='input-edge' style={{ whiteSpace: 'pre-line' }}>
+            {this.getTransitionText(source, target)}
+          </div>
         </foreignObject>
       </g>
     );
   }
-
-  handleEdgeWeightChange = (sourceId: number, targetId: number, newWeight: number) => {
-    this.setState(prevState => {
-      const newWeights = { ...prevState.edgeWeights };
-      if (!newWeights[sourceId]) {
-        newWeights[sourceId] = {};
-      }
-      
-      const sourceWeights = newWeights[sourceId];
-      const oldWeight = sourceWeights[targetId] || 0;
-      const weightDifference = newWeight - oldWeight;
-      
-      const otherTargets = Object.keys(sourceWeights).map(Number).filter(id => id !== targetId);
-      const totalOtherWeight = otherTargets.reduce((sum, id) => sum + sourceWeights[id], 0);
-      
-      if (totalOtherWeight > 0) {
-        const adjustmentFactor = (totalOtherWeight - weightDifference) / totalOtherWeight;
-        otherTargets.forEach(id => {
-          sourceWeights[id] *= adjustmentFactor;
-        });
-      }
-      
-      sourceWeights[targetId] = newWeight;
-      
-      return { edgeWeights: newWeights };
-    });
-    GraphSchematicsManager.setGraphState(this.state);
-  };
 
   updateCentroid = () => {
     let centroidVertex = null;
@@ -784,7 +784,6 @@ export default class GraphSchematics extends React.Component<{}, {
       A ${loopRadius * scale} ${loopRadius * scale} 0 1 1 ${startX * scale} ${startY * scale}
     `;
 
-    const weight = this.state.edgeWeights[vertex.id]?.[vertex.id] || 0;
     const inputAngle = -Math.PI / 2;
     const inputRadius = loopRadius + vertexRadius + 15; 
     const inputX = vertex.x + inputRadius * Math.cos(inputAngle);
@@ -817,25 +816,9 @@ export default class GraphSchematics extends React.Component<{}, {
           width={40 * scale}
           height={20 * scale}
         >
-          <input
-            type="number"
-            step="0.1"
-            min="0"
-            max="1"
-            value={weight}
-            onChange={(e) => this.handleEdgeWeightChange(vertex.id, vertex.id, Number(e.target.value))}
-            style={{
-              width: '100%',
-              height: '100%',
-              background: 'transparent',
-              border: '0',
-              borderRadius: '4px',
-              textAlign: 'center',
-              fontSize: `${20 * scale}px`,
-              color: 'white',
-              outline: 'none'
-            }}
-          />
+          <div className='input-edge' style={{ whiteSpace: 'pre-line' }}>
+            {this.getTransitionText(vertex)}
+          </div>
         </foreignObject>
       </g>
     );
@@ -868,6 +851,7 @@ export default class GraphSchematics extends React.Component<{}, {
         onWheel={this.handleWheel}
         style={{ cursor: this.isDragging ? 'grabbing' : edgeCreationMode ? 'crosshair' : 'grab' }}
       >
+        <AddEdgeModal></AddEdgeModal>
         <svg width={width} height={height}>
           <g transform={`translate(${this.state.offsetX},${this.state.offsetY}) scale(${this.state.scale})`}>
             {this.renderGrid()}

@@ -260,3 +260,26 @@ code {
 .pad-15 {
   padding: 15px;
 }
+
+.pad-10 {
+  padding: 10px;
+}
+
+.float-left {
+  float: left;
+}
+
+.add-button {
+  padding: 10px 20px;
+  background: #0467aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background: #0467aa;
+}
+
+
