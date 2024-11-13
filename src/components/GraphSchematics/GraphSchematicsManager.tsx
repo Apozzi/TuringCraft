@@ -20,6 +20,7 @@ export default class GraphSchematicsManager {
   private static resetAllSubject = new Subject();
   private static loadStateSubject = new Subject<any>();
   private static updateVerticeAndEdgesSubject = new Subject<any>();
+  private static addAndApplyEdgeAndTransitionsSubject = new Subject<any>();
 
   private static onActivateSongInfo = new Subject<any>();
   private static onChangeConfigSubject = new Subject<any>();
@@ -48,6 +49,14 @@ export default class GraphSchematicsManager {
 
   static onApplyKamadaKawai() {
     return GraphSchematicsManager.applyKamadaKawaiSubject;
+  }
+
+  static addAndApplyEdgeAndTransitions(obj:any) {
+    GraphSchematicsManager.addAndApplyEdgeAndTransitionsSubject.next(obj);
+  }
+
+  static onAddAndApplyEdgeAndTransitions() {
+    return GraphSchematicsManager.addAndApplyEdgeAndTransitionsSubject;
   }
 
   static applySpectralLayout() {

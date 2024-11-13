@@ -71,7 +71,22 @@
     left: calc(100vw - 417px);
 }
 
+.turing-machine-tape--display-2 {
+    background: #141423;
+    width: 60px;
+    height: 50px;
+    position: absolute;
+    top: -23px;
+    border-radius: 12px;
+    left: calc(100vw - 497px);
+}
+
 .turing-machine-tape--display:hover{
+    background: #282841;
+    cursor: pointer;
+}
+
+.turing-machine-tape--display-2:hover{
     background: #282841;
     cursor: pointer;
 }
@@ -93,4 +108,37 @@
     color: #ffffff17;
     font-size: 13px;
 }
+
+/* Utilizado para parte de brilho do item atual da tape */
+.turing-machine-tape--actual-step {
+    background-color: #eb515145;
+    border-left: rgb(255 49 63) solid 1px;
+    border-right: rgb(255 49 63) solid 1px;
+    box-shadow: 0 0 20px rgb(255 49 63 / 22%), 0 0 30px rgb(219 11 92 / 59%);
+    z-index: 10;
+}
+
+.turing-machine-tape--tape-status {
+    background: #141423;
+    width: auto;
+    height: 40px;
+    position: absolute;
+    top: -23px;
+    border-radius: 12px;
+    left: 32px;
+    padding-top: 9px;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 24px;
+    font-family: monospace;
+}
+
+.turing-machine-tape--tape-status-rejeitado {
+    background: #4b1818;
+}
+
+.turing-machine-tape--tape-status-aceito {
+    background: #184b33;
+}
+
 

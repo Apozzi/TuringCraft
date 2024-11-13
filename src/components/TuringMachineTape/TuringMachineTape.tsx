@@ -1,19 +1,26 @@
 import React from 'react';
 import './TuringMachineTape.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalculator, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faCalculator, faChevronLeft, faChevronRight, faTv } from '@fortawesome/free-solid-svg-icons';
+import ScreenDisplayModal from '../ScreenDisplayModal/ScreenDisplayModal';
+import DigitalNumbersDisplayModal from '../DigitalNumbersDisplayModal/DigitalNumbersDisplayModal';
+import { FormattedMessage } from 'react-intl';
 
 interface TuringMachineTapeState {
   isPlaying: boolean;
   tape: number[];
-  xTranslation: 0
+  xTranslation: number;
+  isFinished: boolean;
+  isAccepted: boolean;
 }
 
 export default class TuringMachineTape extends React.Component<any> {
   state : TuringMachineTapeState  = {
     isPlaying: false,
     tape: Array(100).fill(0), // Inicializa um array de 100 zeros
-    xTranslation: 0
+    xTranslation: 0,
+    isFinished: false,
+    isAccepted: false
   };
 
   componentDidMount() {
@@ -38,11 +45,21 @@ export default class TuringMachineTape extends React.Component<any> {
   };
 
   render() {
-    const {tape, xTranslation} = this.state;
+    const {tape, xTranslation, isFinished, isAccepted} = this.state;
     return (
       <div className="turing-machine-tape">
+        <ScreenDisplayModal></ScreenDisplayModal>
+        <DigitalNumbersDisplayModal></DigitalNumbersDisplayModal>
         <div className="turing-machine-tape--header">
           {/* Header content if needed */}
+
+          <div className={'turing-machine-tape--tape-status turing-machine-tape--tape-status-' + (isFinished ? (isAccepted ? "aceito" : "rejeitado"): "neutro") }>
+            {
+              isFinished ? 
+                (isAccepted ? (<FormattedMessage id={'accepted'} />) : <FormattedMessage id={'rejected'} />) : <FormattedMessage id={'neutral'} />
+            }
+          </div>
+
           <div className='turing-machine-tape--button-left' onClick={() => this.clickLeft()}>
             <FontAwesomeIcon 
               icon={faChevronLeft} 
@@ -56,7 +73,15 @@ export default class TuringMachineTape extends React.Component<any> {
               className='databar-topbar--icon' />
           </div>
 
-          <div className='turing-machine-tape--display'>
+          <div className='turing-machine-tape--display' onClick={() => ScreenDisplayModal.openModal({})}>
+            <FontAwesomeIcon 
+              icon={faTv} 
+              style={{marginLeft: '14px'}}
+              size="lg" 
+              className='databar-topbar--icon' />
+          </div>
+
+          <div className='turing-machine-tape--display-2' onClick={() => DigitalNumbersDisplayModal.openModal({})}>
             <FontAwesomeIcon 
               icon={faCalculator} 
               style={{marginLeft: '21px'}}

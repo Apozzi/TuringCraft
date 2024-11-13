@@ -55,6 +55,16 @@ export const messages: Record<Locale, {
   select_language: string;
   app_is_not_available_mobile: string;
   add_transition: string;
+  no_transitions_added: string;
+  direction: string;
+  left: string;
+  right: string;
+  input: string;
+  output: string;
+  transitions: string;
+  accepted: string;
+  rejected: string;
+  neutral: string;
 }> = {
   'en': {
     add_vertex: "Add Vertex",
@@ -110,7 +120,17 @@ export const messages: Record<Locale, {
     radial_layout_config: "Radial Layout Configuration",
     select_language: "Select Language: ",
     app_is_not_available_mobile: "Este aplicativo não está disponível em dispositivos móveis.",
-    add_transition: "Add Transition"
+    add_transition: "Add Transition",
+    no_transitions_added: "No transitions added. To add an edge, you need to add at least one transition.",
+    direction: "Direction",
+    left: "Left",
+    right: "Right",
+    input: "Input",
+    output: "Output",
+    transitions: "Transitions",
+    accepted: "Accepted",
+    rejected: "Rejected",
+    neutral: "Neutral"
   },
   'pt': {
     add_vertex: "Adicionar Vértice",
@@ -166,6 +186,16 @@ export const messages: Record<Locale, {
     radial_layout_config: "Configurações Layout de Radial",
     select_language: "Selecionar Linguagem: ",
     app_is_not_available_mobile: "This app is not available on mobile devices.",
-    add_transition: "Adicionar Transição"
+    add_transition: "Adicionar Transição",
+    no_transitions_added: "Nenhuma transição adicionada. Para adicionar uma aresta, você precisa adicionar pelo menos uma transição.",
+    direction: "Direção",
+    left: "Esquerda",
+    right: "Direita",
+    input: "Entrada",
+    output: "Saida",
+    transitions: "Transições",
+    accepted: "Aceitado",
+    rejected: "Rejeitado",
+    neutral: "Neutro"
   }
 };

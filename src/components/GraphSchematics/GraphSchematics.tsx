@@ -262,19 +262,36 @@ export default class GraphSchematics extends React.Component<{}, {
         this.setState({ vertices: spectralLayout.layout(vertices, edges) });
       });
 
+      GraphSchematicsManager.exitCreationMode().subscribe(() => {
+        this.setState({ edgeCreationMode: false, edgeStartVertex: null });
+      });
+
+      GraphSchematicsManager.onAddAndApplyEdgeAndTransitions().subscribe((obj) => {
+        const {sourceId, targetId, transitions} = obj;
+        this.addEdge(sourceId, targetId);
+        this.setState(prevState => {
+          const newWeights = { ...prevState.edgeWeights };
+          
+          if (!newWeights[sourceId]) newWeights[sourceId] = {};
+          if (!newWeights[sourceId][targetId]) newWeights[sourceId][targetId] = [];
+          
+          const newTransitions = transitions.map((transition: any) => ({
+            read: transition.input,
+            write: transition.output,
+            move: transition.direction === 'left' ? 'L' : 'R'
+          }));
+          
+          newWeights[sourceId][targetId].push(...newTransitions.filter(
+            (t:any) => !newWeights[sourceId][targetId].find((e: any) => e.read == t.read && e.write == t.write))
+          );
+          
+          return { edgeWeights: newWeights };
+        });
+      });
+
     }
     mounted = true;
   }
-
-  addTransition = (sourceId: number, targetId: number, transition: TuringTransition) => {
-    this.setState(prevState => {
-      const newWeights = { ...prevState.edgeWeights };
-      if (!newWeights[sourceId]) newWeights[sourceId] = {};
-      if (!newWeights[sourceId][targetId]) newWeights[sourceId][targetId] = [];
-      newWeights[sourceId][targetId].push(transition);
-      return { edgeWeights: newWeights };
-    });
-  };
 
   startTuringMachine = (initialState: number, inputTape: string[]) => {
     this.setState({
@@ -425,9 +442,7 @@ export default class GraphSchematics extends React.Component<{}, {
       } else {
         //this.addEdge(this.state.edgeStartVertex, id);
         // aqui vai a modal
-        AddEdgeModal.openModal({});
-        //this.setState({ edgeCreationMode: false, edgeStartVertex: null });
-        //GraphSchematicsManager.exitEdgeCreationMode();
+        AddEdgeModal.openModal({sourceId: this.state.edgeStartVertex, targetId: id});
       }
     } else {
       this.setState({ draggingVertex: true, selectedVertex: id });
@@ -740,10 +755,10 @@ export default class GraphSchematics extends React.Component<{}, {
         <foreignObject className='graph-schematics--input'
           x={inputPosX - 15 * scale}
           y={inputPosY - 15 * scale}
-          width={30 * scale}
-          height={20 * scale}
+          width={'100%'}
+          height={'100%'}
         >
-          <div className='input-edge' style={{ whiteSpace: 'pre-line' }}>
+          <div className='input-edge' style={{ whiteSpace: 'pre-line' , fontSize: '15px' }}>
             {this.getTransitionText(source, target)}
           </div>
         </foreignObject>
@@ -813,8 +828,8 @@ export default class GraphSchematics extends React.Component<{}, {
         <foreignObject
           x={(inputX - 20) * scale}
           y={(inputY - 10) * scale}
-          width={40 * scale}
-          height={20 * scale}
+          width={60 * scale}
+          height={'100%'}
         >
           <div className='input-edge' style={{ whiteSpace: 'pre-line' }}>
             {this.getTransitionText(vertex)}

@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #0e0e14;
+  overflow: hidden;
 }
 
 code {
@@ -44,7 +45,7 @@ code {
   width: 105px;
   background-color: #353549;
   color: white;
-  border: 2px solid #767676;
+  border: 2px solid #7676762e;
   margin: 18px 11px;
   font-size: 44px;
   cursor: pointer;
@@ -280,6 +281,11 @@ code {
 
 .add-button:hover {
   background: #0467aa;
+}
+
+.add-button:disabled {
+  color: #a5a5a5;
+  cursor: auto;
 }
 
 

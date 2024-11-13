@@ -4,8 +4,10 @@ import Modal from 'react-modal';
 import { Subject } from 'rxjs';
 import './AddEdgeModal.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import toast from 'react-hot-toast';
 import { FormattedMessage } from 'react-intl';
+import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
 
 interface Transition {
   input: string;
@@ -15,6 +17,8 @@ interface Transition {
 
 interface State {
   showModal: boolean;
+  sourceId: number;
+  targetId: number;
   transitions: Transition[];
   newTransition: Transition;
 }
@@ -32,6 +36,8 @@ export default class AddEdgeModal extends React.Component<any, State> {
 
   state: State = {
     showModal: false,
+    sourceId: 0,
+    targetId: 0,
     transitions: [],
     newTransition: {
       input: '',
@@ -46,23 +52,46 @@ export default class AddEdgeModal extends React.Component<any, State> {
 
   componentDidMount() {
     Modal.setAppElement('#app');
-    AddEdgeModal.openSubject.subscribe(() => {
-      this.setState({ showModal: true });
+    AddEdgeModal.openSubject.subscribe((obj: any) => {
+      this.setState({ showModal: true,
+          transitions: [],
+          sourceId: obj.sourceId,
+          targetId: obj.targetId,
+          newTransition: {
+            input: '',
+            output: '',
+            direction: 'left',
+        }
+      });
     });
   }
 
+  checkDuplicateTransition = (newTransition: Transition): boolean => {
+    return this.state.transitions.some(
+      transition => 
+        transition.input === newTransition.input && 
+        transition.output === newTransition.output
+    );
+  };
+
   handleCloseModal = () => {
     this.setState({ showModal: false });
+    GraphSchematicsManager.exitEdgeCreationMode();
   };
 
   handleAddTransition = () => {
+    const { newTransition } = this.state;
+
+    if (this.checkDuplicateTransition(newTransition)) {
+      toast.error('Essa transição já existe! (I/O iguais)');
+      return;
+    }
+
     this.setState((prevState) => ({
-      transitions: [...prevState.transitions, prevState.newTransition],
+      transitions: [...prevState.transitions, newTransition],
       newTransition: {
-        from: '',
         input: '',
         output: '',
-        to: '',
         direction: 'left',
       },
     }));
@@ -93,7 +122,19 @@ export default class AddEdgeModal extends React.Component<any, State> {
     }));
   };
 
+  addAndApplyEdgeAndTransitions = () => {
+    const { transitions, sourceId, targetId } = this.state;
+    GraphSchematicsManager.addAndApplyEdgeAndTransitions({
+      transitions,
+      sourceId,
+      targetId
+    });
+    this.handleCloseModal();
+  }
+
   render() {
+    const { direction, input, output } = this.state.newTransition;
+
     return (
       <div>
         <Modal
@@ -117,40 +158,42 @@ export default class AddEdgeModal extends React.Component<any, State> {
             <div className="transition-form">
               <div>
                 <div className="form-group float-left">
-                  <label htmlFor="input">Input:</label>
+                  <label htmlFor="input"><FormattedMessage id={'input'}/>:</label>
                   <input
                     type="text"
                     id="input"
                     name="input"
-                    value={this.state.newTransition.input}
+                    value={input}
                     onChange={this.handleInputChange}
                   />
                 </div>
                 <div className="form-group float-left">
-                  <label htmlFor="output">Output:</label>
+                  <label htmlFor="output"><FormattedMessage id={'output'}/>:</label>
                   <input
                     type="text"
                     id="output"
                     name="output"
-                    value={this.state.newTransition.output}
+                    value={output}
                     onChange={this.handleInputChange}
                   />
                 </div>
                 <div className="form-group float-left">
-                  <label htmlFor="direction">Direction:</label>
+                  <label htmlFor="direction"><FormattedMessage id={'direction'}/>:</label>
                   <select
                     id="direction"
                     name="direction"
-                    value={this.state.newTransition.direction}
+                    value={direction}
                     onChange={this.handleDirectionChange}
+                    className={`direction`}
+                    
                   >
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>
+                    <option value="left"><FormattedMessage id={'left'}/></option>
+                    <option value="right"><FormattedMessage id={'right'}/></option>
                   </select>
                 </div>
 
                 <div className='form-group float-left pad-10'>
-                  <button className="add-button" onClick={this.handleAddTransition}>
+                  <button className="add-button" onClick={this.handleAddTransition} disabled={!input ||!output}>
                     <FormattedMessage id={'add_transition'} />
                   </button>
                 </div>
@@ -160,21 +203,28 @@ export default class AddEdgeModal extends React.Component<any, State> {
             <div className="transitions-list">
               
               <FormattedMessage id={'transitions'} />:
-            
-              <ul>
+              {
+              this.state.transitions.length === 0 ? (
+                    <div className="alert-add-edge">
+                      <FormattedMessage id={'no_transitions_added'} />
+                    </div>
+                  ) :(
+              <ul className='transition-list--ul'>
                 {this.state.transitions.map((transition, index) => (
-                  <li key={index}>
-                    {} ({transition.input}/{transition.output}) {} ({transition.direction})
+                  <li key={index} className='transition-list--column'>
+                    <div className='transition-list--column-label'>
+                      {} {transition.input} → {transition.output} , {transition.direction === 'left' ? 'L' : 'R'}
+                    </div>
                     <button
                       className="remove-button"
-                      onClick={() => this.handleRemoveTransition(index)}
-                    >
+                      onClick={() => this.handleRemoveTransition(index)}>
                       <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </li>
                 ))}
-              </ul>
-              <button className="save-button">
+              </ul>)
+              }
+              <button className="save-button" disabled={!this.state.transitions.length} onClick={() => this.addAndApplyEdgeAndTransitions()}>
                 <FormattedMessage id={'add_edge'} />
               </button>
             </div>
