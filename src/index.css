@@ -14,30 +14,14 @@ code {
     monospace;
 }
 
-
-.default-button {
-  padding: 11px 24px;
-  background: #217cda;
-  border: none;
-  border-radius: 4px;
+div, a {
   color: white;
-  cursor: pointer;
-  font-size: 15px;
 }
 
-.confirm-button {
-  background: #30cc1d;
-  padding: 11px 24px;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.title {
-  color: white;
-  font-size: 18px;
+h3, h4 {
+  font-weight: 400;
+  border-top: solid 2px #36364d;;
+  padding-top: 4px;
 }
 
 .toolbox-button {
@@ -79,8 +63,19 @@ code {
   border: 2px solid #453138;
 }
 
-.control-center {
+.control-center, .control-left, .control-right, 
+.control-bottom, .control-top {
     position: absolute;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.control-center {
     border: 2px solid #343145;
     border-radius: 51px;
     width: 48px;
@@ -88,114 +83,39 @@ code {
     top: 45px;
     left: 43px;
     font-size: large;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
 }
 
 .control-left {
     font-size: 30px;
-    position: absolute;
     left: 10px;
     top: 49px;
     color: #343145;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
 }
 
 .control-right {
     font-size: 30px;
-    position: absolute;
     right: 11px;
     top: 49px;
     color: #343145;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
 }
 
 .control-bottom {
     font-size: 30px;
-    position: absolute;
     left: 55px;
     bottom: 5px;
     color: #343145;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
 }
 
 .control-top {
     font-size: 30px;
-    position: absolute;
     left: 56px;
     top: 3px;
     color: #343145;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
 }
 
-.control-top:hover {color: #c1b1b7;}
-.control-left:hover {color: #c1b1b7;}
-.control-right:hover {color: #c1b1b7;}
-.control-bottom:hover {color: #c1b1b7;}
+.control-top:hover, .control-left:hover,
+.control-right:hover, .control-bottom:hover {color: #c1b1b7;}
 .control-center:hover {background-color: #6d6366;}
-
-.button {
-  background-color: #04AA6D; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 40px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin-right: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.confirmation-button:hover{
-  background-color: #037d50;
-}
-
-.cancel-button {
-  background-color: #aa040e;
-}
-
-.cancel-button:hover {
-  background-color: #6f030a;
-}
-
-.next-button {
-  background-color: #0467aa;
-}
-
-.next-button:hover {
-  background-color: #04446f;
-}
 
 .sound-info-label {
   font-size: 14px;

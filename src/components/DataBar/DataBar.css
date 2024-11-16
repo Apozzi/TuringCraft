@@ -28,12 +28,6 @@
     cursor: pointer;
 }
 
-h3, h4 {
-    font-weight: 400;
-    border-top: solid 2px #36364d;;
-    padding-top: 4px;
-}
-
 .databar--select {
     background-color: #10111a;
     color: white;
