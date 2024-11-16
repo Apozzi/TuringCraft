@@ -18,7 +18,7 @@ interface TuringMachineTapeState {
 export default class TuringMachineTape extends React.Component<any> {
   state : TuringMachineTapeState  = {
     isPlaying: false,
-    tape: Array(100).fill(0), // Inicializa um array de 100 zeros
+    tape: Array(1000).fill(0),
     xTranslation: 0,
     isFinished: false,
     isAccepted: false
