@@ -6,25 +6,40 @@ import ScreenDisplayModal from '../ScreenDisplayModal/ScreenDisplayModal';
 import DigitalNumbersDisplayModal from '../DigitalNumbersDisplayModal/DigitalNumbersDisplayModal';
 import { FormattedMessage } from 'react-intl';
 import { Subject } from 'rxjs';
+import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
+
+interface TuringMachineTapeProps {
+  isPlaying: boolean;
+}
 
 interface TuringMachineTapeState {
   isPlaying: boolean;
   tape: number[];
   xTranslation: number;
+  headPosition: number;
   isFinished: boolean;
   isAccepted: boolean;
 }
 
-export default class TuringMachineTape extends React.Component<any> {
+export default class TuringMachineTape extends React.Component<TuringMachineTapeProps> {
+  initialTapeValue = Array(1000).fill(0);
+  
   state : TuringMachineTapeState  = {
     isPlaying: false,
-    tape: Array(1000).fill(0),
+    tape: this.initialTapeValue,
+    headPosition: 0,
     xTranslation: 0,
     isFinished: false,
     isAccepted: false
   };
 
   private static tapeSubject = new Subject();
+
+  componentDidMount() {
+    TuringMachineTape.tapeSubject.next(this.initialTapeValue)
+    GraphSchematicsManager.onChangeHeadPositionAndTape().subscribe(obj => this.setState({headPosition: obj.headPosition, tape: obj.tape}));
+  }
+
 
   static onTapeChange() {
     return TuringMachineTape.tapeSubject;
@@ -96,7 +111,7 @@ export default class TuringMachineTape extends React.Component<any> {
           transform: "translateX("+ xTranslation*400 + "px)"
         }}>
           {tape.map((value, index) => (
-            <div key={index} className="turing-machine-tape--tape-item">
+            <div key={index} className={"turing-machine-tape--tape-item " + (this.props.isPlaying && (this.state.headPosition === index) ? "turing-machine-tape--actual-step" : "")}>
               <div className="turing-machine-tape--index">{index + 2 -tape.length/2}</div>
               <input
                 type="number"

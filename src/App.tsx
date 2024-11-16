@@ -92,7 +92,7 @@ export default class App extends React.Component {
           </div>
           <GraphSchematics></GraphSchematics>
           <DataBar></DataBar>
-          <TuringMachineTape></TuringMachineTape>
+          <TuringMachineTape isPlaying={this.state.isPlaying}></TuringMachineTape>
         </IntlProvider>
       </div>
     );

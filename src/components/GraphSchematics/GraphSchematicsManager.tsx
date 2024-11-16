@@ -25,6 +25,7 @@ export default class GraphSchematicsManager {
 
   private static onActivateSongInfo = new Subject<any>();
   private static onChangeConfigSubject = new Subject<any>();
+  private static onChangeHeadPositionAndTapeSubject = new Subject<any>();
 
   private static offsetControlX = new Subject();
   private static offsetControlY = new Subject();
@@ -42,6 +43,16 @@ export default class GraphSchematicsManager {
   private static applyTreeLayoutSubject = new Subject<any>();
   private static applyRadialLayoutSubject = new Subject<any>();
   private static applySpectralLayoutSubject = new Subject<any>();
+
+
+  static changeHeadPositionAndTape(headPosition: any, tape: any) {
+    GraphSchematicsManager.onChangeHeadPositionAndTapeSubject.next({headPosition, tape});
+  }
+
+  static onChangeHeadPositionAndTape() {
+    return GraphSchematicsManager.onChangeHeadPositionAndTapeSubject;
+  }
+
 
 
   static applyKamadaKawai() {

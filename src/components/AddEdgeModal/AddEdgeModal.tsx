@@ -42,7 +42,7 @@ export default class AddEdgeModal extends React.Component<any, State> {
     newTransition: {
       input: '',
       output: '',
-      direction: 'left',
+      direction: 'right',
     },
   };
 
@@ -60,7 +60,7 @@ export default class AddEdgeModal extends React.Component<any, State> {
           newTransition: {
             input: '',
             output: '',
-            direction: 'left',
+            direction: 'right',
         }
       });
     });

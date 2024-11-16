@@ -17,6 +17,7 @@ import { RadialLayout } from '../../utils/layouts/RadialLayout';
 import { SpectralLayout } from '../../utils/layouts/SpectralLayout';
 import { KamadaKawai } from '../../utils/KamadaKawaiAlgorithm';
 import AddEdgeModal from '../AddEdgeModal/AddEdgeModal';
+import TuringMachineTape from '../TuringMachineTape/TuringMachineTape';
 
 const debugMode = false;
 
@@ -98,7 +99,7 @@ export default class GraphSchematics extends React.Component<{}, {
       audioContext: new AudioContext(),
       edgeWeights: {},
       tape: ['B'],
-      headPosition: 0,
+      headPosition: 500, //Default do tape é 1000 e deve iniciar no meio.
       currentState: null,
       isRunning: false,
       config: {
@@ -142,9 +143,8 @@ export default class GraphSchematics extends React.Component<{}, {
             edges: this.state.edges.filter(e => e.source !== edge.source || e.target !== edge.target),
           }});
       });
-      let timer : number;
       GraphSchematicsManager.isPlaying().subscribe(async (state:any) => {
-        const { vertices, actualVertex, config } = this.state;
+        const { vertices, actualVertex } = this.state;
         if (vertices.length === 0) return;
 
         if (state) {
@@ -158,11 +158,11 @@ export default class GraphSchematics extends React.Component<{}, {
             }, () => {
               const currentVertex = vertices[0];
               this.playVertexSound(currentVertex);
+              this.startTuringMachine();
             });
           }
-          this.startTuringMachine(0, []);
         } else {
-          clearInterval(timer);
+          this.stopMachine();
         }
       });
       GraphSchematicsManager.onChangeX().subscribe((mov:any) => {
@@ -289,28 +289,36 @@ export default class GraphSchematics extends React.Component<{}, {
         });
       });
 
+      TuringMachineTape.onTapeChange().subscribe((tape: any) => {
+        if (this.state.isRunning) {
+          this.setState({ tape });
+          return;
+        }
+        this.setState({ tape, headPosition: tape.length / 2 - 2 });
+      });
+
     }
     mounted = true;
   }
 
-  startTuringMachine = (initialState: number, inputTape: string[]) => {
+  startTuringMachine = () => {
     this.setState({
-      currentState: initialState,
-      tape: inputTape,
-      headPosition: 0,
+      currentState: 0,
+      headPosition:  this.state.tape.length/2 - 2,
       isRunning: true,
-      actualVertex: initialState
     }, this.runMachine);
   };
 
   runMachine = async () => {
     while (this.state.isRunning) {
+      const { tape, headPosition } = this.state;
+      GraphSchematicsManager.changeHeadPositionAndTape(headPosition, tape);
+      await new Promise(resolve => setTimeout(resolve, 500 / this.state.config.speed));
       const hasNextStep = this.moveToNextVertex();
       if (!hasNextStep) {
-        this.setState({ isRunning: false });
+        this.stopMachine();
         break;
       }
-      await new Promise(resolve => setTimeout(resolve, 500 / this.state.config.speed));
     }
   };
 
@@ -322,7 +330,7 @@ export default class GraphSchematics extends React.Component<{}, {
     const { actualVertex, edges, edgeWeights, tape, headPosition } = this.state;
     if (actualVertex === null) return;
   
-    const currentSymbol = tape[headPosition] || 'B';
+    const currentSymbol = tape[headPosition];
     let transitionFound = false;
     let nextVertex = null;
     let selectedTransition = null;
@@ -330,7 +338,7 @@ export default class GraphSchematics extends React.Component<{}, {
     const possibleEdges = edges.filter(edge => edge.source === actualVertex);
     for (const edge of possibleEdges) {
       const transitions = edgeWeights[edge.source]?.[edge.target] || [];
-      const validTransition = transitions.find(transition => transition.read === currentSymbol);
+      const validTransition = transitions.find(transition => String(transition.read) === String(currentSymbol));
       if (validTransition) {
         nextVertex = edge.target;
         selectedTransition = validTransition;
@@ -355,7 +363,8 @@ export default class GraphSchematics extends React.Component<{}, {
         const updatedVertices = prevState.vertices.map(v => 
           v.id === nextVertex ? { ...v, visitCount: (v.visitCount || 0) + 1 } : v
         );
-        
+        GraphSchematicsManager.changeHeadPositionAndTape(newHeadPosition, newTape);
+        GraphSchematicsManager.changeVerticeArray(updatedVertices);
         return {
           actualVertex: nextVertex,
           vertexHistory: [...prevState.vertexHistory, nextVertex],
@@ -370,11 +379,9 @@ export default class GraphSchematics extends React.Component<{}, {
           await this.playVertexSound(currentVertex);
         }
       });
-  
-      GraphSchematicsManager.setGraphState(this.state);
       return true;
     }
-  
+    GraphSchematicsManager.setGraphState(this.state);
     return false;
   };
 
