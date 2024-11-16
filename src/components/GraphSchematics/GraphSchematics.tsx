@@ -435,22 +435,23 @@ export default class GraphSchematics extends React.Component<{}, {
     } : null);
   }
 
+  updateStateCallback = () => GraphSchematicsManager.setGraphState(this.state);
+
   handleVertexMouseDown = (event: React.MouseEvent, id: number) => {
     if (this.state.edgeCreationMode) {
       if (this.state.edgeStartVertex === null) {
-        this.setState({ edgeStartVertex: id });
+        this.setState({ edgeStartVertex: id }, this.updateStateCallback);
       } else {
         //this.addEdge(this.state.edgeStartVertex, id);
         // aqui vai a modal
         AddEdgeModal.openModal({sourceId: this.state.edgeStartVertex, targetId: id});
       }
     } else {
-      this.setState({ draggingVertex: true, selectedVertex: id });
+      this.setState({ draggingVertex: true, selectedVertex: id }, this.updateStateCallback);
       this.selectedVertex(id);
       this.startX = event.clientX;
       this.startY = event.clientY;
     }
-    GraphSchematicsManager.setGraphState(this.state);
   };
 
   handleMouseDown = (event: React.MouseEvent) => {
@@ -458,7 +459,7 @@ export default class GraphSchematics extends React.Component<{}, {
     const { selectedVertex } = this.state;
   
     if (selectedVertex !== null && target.tagName !== 'circle' && target.tagName !== 'rect' && target.tagName !== 'text') {
-      this.setState({ selectedVertex: null });
+      this.setState({ selectedVertex: null }, this.updateStateCallback);
       this.selectedVertex(null);
     }
   
@@ -467,7 +468,6 @@ export default class GraphSchematics extends React.Component<{}, {
       this.startX = event.clientX;
       this.startY = event.clientY;
     }
-    GraphSchematicsManager.setGraphState(this.state);
   };
 
   handleMouseMove = (event: React.MouseEvent) => {
@@ -500,7 +500,7 @@ export default class GraphSchematics extends React.Component<{}, {
             : v
         );
   
-        this.setState({ vertices: updatedVertices });
+        this.setState({ vertices: updatedVertices }, this.updateStateCallback);
         GraphSchematicsManager.changeVerticeArray(this.state.vertices);
   
         this.startX = event.clientX;
@@ -513,12 +513,11 @@ export default class GraphSchematics extends React.Component<{}, {
       this.setState(prevState => ({
         offsetX: prevState.offsetX + deltaX,
         offsetY: prevState.offsetY + deltaY,
-      }));
+      }), this.updateStateCallback);
   
       this.startX = event.clientX;
       this.startY = event.clientY;
     }
-    GraphSchematicsManager.setGraphState(this.state);
   };
 
   handleMouseUp = () => {
@@ -554,12 +553,11 @@ export default class GraphSchematics extends React.Component<{}, {
         GraphSchematicsManager.changeVerticeArray(newState);
         return {
         vertices: newState
-      }});
+      }}, this.updateStateCallback);
     } else {
       AlphabetIterator.subIndex();
       console.log("Cannot add vertex: Overlapping with an existing vertex");
     }
-    GraphSchematicsManager.setGraphState(this.state);
   };
 
   addEdge = (sourceId: number, targetId: number) => {
@@ -569,8 +567,7 @@ export default class GraphSchematics extends React.Component<{}, {
       return {
         edges: newEdges
       };
-    });
-    GraphSchematicsManager.setGraphState(this.state);
+    }, this.updateStateCallback);
   };
 
 
@@ -578,7 +575,7 @@ export default class GraphSchematics extends React.Component<{}, {
     this.setState(prevState => ({
       edgeCreationMode: !prevState.edgeCreationMode,
       edgeStartVertex: null
-    }));
+    }), this.updateStateCallback);
   };
 
   deleteVertex = (id: number) => {
@@ -591,8 +588,7 @@ export default class GraphSchematics extends React.Component<{}, {
         edges: updatedEdges,
         selectedVertex: null
       };
-    });
-    GraphSchematicsManager.setGraphState(this.state);
+    }, this.updateStateCallback);
   };
 
   renderGrid() {

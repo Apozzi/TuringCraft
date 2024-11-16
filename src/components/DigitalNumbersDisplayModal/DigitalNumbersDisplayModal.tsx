@@ -1,69 +1,67 @@
 import React from 'react';
-import Modal from 'react-modal';
+import Draggable from 'react-draggable';
 import { Subject } from 'rxjs';
 import './DigitalNumbersDisplayModal.css';
-import { FormattedMessage } from 'react-intl';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+
 
 export default class DigitalNumbersDisplayModal extends React.Component<any> {
   static openSubject = new Subject();
 
-  customStyles = {
-    content : {
-      height: '80%',
-      background: 'rgb(42 42 49)',
-      border: 'none',
-      padding: "0px"
-    }
-  };
-
   state = {
     showModal: false,
-    label: '',
-    value: 0,
-    index: 0
+    data: null,
   };
 
   static openModal(obj: any) {
     this.openSubject.next(obj);
   }
 
-
   componentDidMount() {
-    Modal.setAppElement('#app');
-    DigitalNumbersDisplayModal.openSubject.subscribe(() => {
-      this.setState({ showModal: true });
+    DigitalNumbersDisplayModal.openSubject.subscribe((data) => {
+      this.setState({ showModal: true, data });
     });
   }
 
-  handleCloseModal () {
-    this.setState({ showModal: false });
-  }
-
+  closeModal = () => {
+    this.setState({ showModal: false, data: null });
+  };
 
   render() {
+    const { showModal, data } = this.state;
+
     return (
       <div>
-        <Modal
-           isOpen={this.state.showModal}
-           contentLabel="Project"
-           style={this.customStyles}
-           onRequestClose={() => this.handleCloseModal()}
-           overlayClassName="overlay"
-           className='content-about'
-        >
-          <div className="modal-header">
-            <div className="modal-title">
-              <FormattedMessage id={"about"}/>
-            </div>
-            <div className="modal-close-icon" onClick={() => this.handleCloseModal()}>
-              X
-            </div>
-          </div>
-          
-
-
-        </Modal>
+        {/* Modal visível apenas quando showModal for true */}
+        {showModal && (
+          <>
+            <Draggable>
+              <div className="draggable-modal-container" style={{minHeight: '363px', width: '338px'}}>
+                <div className="draggable-modal-header">
+                  <div className='draggable-modal-header--title'>
+                    <h2>Display Numérico</h2> 
+                    <Tippy content="O display númerico utiliza o indices de 0-6 da fita e converte a representação binária em decimal.">
+                      <div className='draggable-modal-header--tooltip-icon'>?</div>
+                    </Tippy>
+                  </div>
+                  <div className="modal-close-icon" onClick={this.closeModal}>
+                    X
+                  </div>
+                </div>
+                <div className="draggable-modal-body">
+                  <div className='digital-numbers'>
+                      88
+                  </div>
+                  <div className='digital-numbers'>
+                    12
+                 </div>
+                </div>
+              </div>
+            </Draggable>
+          </>
+        )}
       </div>
-    )
+    );
   }
 }

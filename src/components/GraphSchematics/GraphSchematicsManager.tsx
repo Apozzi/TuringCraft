@@ -1,12 +1,13 @@
 import { Subject } from "rxjs";
 import AlphabetIterator from "../../utils/AlphabetIterator";
 import { Vertex } from "../../interfaces/Vertex";
+import toast from "react-hot-toast";
 
 export default class GraphSchematicsManager {
 
   private static movement = 100;
   private static isEdgeCreationMode = false;
-  private static savedState = {};
+  private static savedState: any = {};
 
   private static addVertexSubject = new Subject();
   private static changeVertexSubject = new Subject();
@@ -165,6 +166,8 @@ export default class GraphSchematicsManager {
   }
 
   static toggleEdgeCreationMode(data: any) {
+    const { vertices } = GraphSchematicsManager.savedState;
+    if (!vertices || vertices.length === 0) return toast('Não é possivel adicionar arrestas com nenhum vertice.');
     GraphSchematicsManager.edgeCreationModeSubject.next(data);
     this.isEdgeCreationMode=true;
   }

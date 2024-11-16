@@ -1,6 +1,5 @@
-.overlay {
-    position: fixed;
-    inset: 0px;
-    background-color: rgb(16 14 14 / 85%);
-    z-index: 102;
+@import url('https://fonts.cdnfonts.com/css/digital-numbers');
+
+.digital-numbers {
+    font-family: 'Digital Numbers', sans-serif;
 }
