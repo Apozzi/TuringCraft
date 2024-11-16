@@ -5,6 +5,7 @@ import { faCalculator, faChevronLeft, faChevronRight, faTv } from '@fortawesome/
 import ScreenDisplayModal from '../ScreenDisplayModal/ScreenDisplayModal';
 import DigitalNumbersDisplayModal from '../DigitalNumbersDisplayModal/DigitalNumbersDisplayModal';
 import { FormattedMessage } from 'react-intl';
+import { Subject } from 'rxjs';
 
 interface TuringMachineTapeState {
   isPlaying: boolean;
@@ -23,8 +24,10 @@ export default class TuringMachineTape extends React.Component<any> {
     isAccepted: false
   };
 
-  componentDidMount() {
-    // Qualquer lógica de inicialização adicional, se necessário
+  private static tapeSubject = new Subject();
+
+  static onTapeChange() {
+    return TuringMachineTape.tapeSubject;
   }
 
   clickLeft() {
@@ -41,7 +44,7 @@ export default class TuringMachineTape extends React.Component<any> {
       const newTape = [...prevState.tape];
       newTape[index] = newValue;
       return { tape: newTape };
-    });
+    }, () => TuringMachineTape.tapeSubject.next(this.state.tape));
   };
 
   render() {
