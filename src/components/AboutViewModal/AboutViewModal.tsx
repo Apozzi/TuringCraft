@@ -62,6 +62,7 @@ export default class AboutViewModal extends React.Component<any> {
               X
             </div>
           </div>
+          
           <div className='develeped-by'>
             <FormattedMessage id={"developed_by"}/>
           </div>
