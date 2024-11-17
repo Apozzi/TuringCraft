@@ -27,6 +27,9 @@ export default class GraphSchematicsManager {
   private static onChangeConfigSubject = new Subject<any>();
   private static onChangeHeadPositionAndTapeSubject = new Subject<any>();
 
+  //TODO - questoes que envolvem status
+  private static onChangeStatusSubject = new Subject<any>();
+
   private static offsetControlX = new Subject();
   private static offsetControlY = new Subject();
   private static offsetCenter = new Subject();
@@ -45,6 +48,14 @@ export default class GraphSchematicsManager {
   private static applySpectralLayoutSubject = new Subject<any>();
 
 
+  static changeStatus(status: any) {
+    GraphSchematicsManager.onChangeStatusSubject.next(status);
+  }
+
+  static onChangeStatus() {
+    return GraphSchematicsManager.onChangeStatusSubject;
+  }
+
   static changeHeadPositionAndTape(headPosition: any, tape: any) {
     GraphSchematicsManager.onChangeHeadPositionAndTapeSubject.next({headPosition, tape});
   }
@@ -52,8 +63,6 @@ export default class GraphSchematicsManager {
   static onChangeHeadPositionAndTape() {
     return GraphSchematicsManager.onChangeHeadPositionAndTapeSubject;
   }
-
-
 
   static applyKamadaKawai() {
     GraphSchematicsManager.applyKamadaKawaiSubject.next({});

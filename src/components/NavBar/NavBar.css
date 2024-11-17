@@ -4,7 +4,6 @@
     display: flex;
     font-size: calc(10px + 2vmin);
     color: white;
-    padding: 0px 15px;
 }
 
 .navbar--button {
@@ -71,4 +70,38 @@
 
 .file-input-label {
     cursor: pointer;
+}
+
+.title {
+    font-family: "Silkscreen", sans-serif;
+    padding-top: 3px;
+    padding-right: 25px;
+    padding-left: 25px;
+    background: #21212b;
+    position: relative;
+    color: white;
+    z-index: 1;
+}
+
+.title::before,
+.title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 3px;
+    left: 25px;
+    width: calc(100% - 50px);
+    height: 100%;
+    background: transparent;
+}
+
+.title::before {
+    color: rgba(255, 0, 0, 0.8);
+    transform: translateX(-3px);
+    z-index: -1;
+}
+
+.title::after {
+    color: rgba(0, 255, 255, 0.8);
+    transform: translateX(3px);
+    z-index: -1;
 }

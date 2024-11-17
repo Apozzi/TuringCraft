@@ -65,6 +65,7 @@ export const messages: Record<Locale, {
   accepted: string;
   rejected: string;
   neutral: string;
+  infinite_loop_example: string;
 }> = {
   'en': {
     add_vertex: "Add Vertex",
@@ -130,7 +131,8 @@ export const messages: Record<Locale, {
     transitions: "Transitions",
     accepted: "Accepted",
     rejected: "Rejected",
-    neutral: "Neutral"
+    neutral: "Neutral",
+    infinite_loop_example: "Ciclic Loop"
   },
   'pt': {
     add_vertex: "Adicionar Vértice",
@@ -196,6 +198,7 @@ export const messages: Record<Locale, {
     transitions: "Transições",
     accepted: "Aceitado",
     rejected: "Rejeitado",
-    neutral: "Neutro"
+    neutral: "Neutro",
+    infinite_loop_example: "Ciclo Infinito"
   }
 };

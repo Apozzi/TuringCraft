@@ -4,13 +4,16 @@ import { Subject } from 'rxjs';
 import './ScreenDisplayModal.css';
 import Tippy from '@tippyjs/react';
 import TuringMachineTape from '../TuringMachineTape/TuringMachineTape';
+import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
 
 export default class ScreenDisplayModal extends React.Component<any> {
   static openSubject = new Subject();
 
   state = {
     showModal: false,
-    pixels: Array.from({ length: 340 })
+    pixels: Array.from({ length: 340 }),
+    offset : 0,
+    tape: []
   };
 
   static openModal(obj: any) {
@@ -22,9 +25,18 @@ export default class ScreenDisplayModal extends React.Component<any> {
       this.setState({ showModal: true });
     });
     TuringMachineTape.onTapeChange().subscribe((tape: any) => {
-      let indexZero = tape.length/2 - 2
-      this.setState({ pixels: tape.slice(indexZero, indexZero + 340)});
+      const { offset } = this.state;
+      this.setState({ tape, pixels: this.getPixelsFromTape(tape, offset)});
     });
+    GraphSchematicsManager.onChangeConfig().subscribe(config => {
+      const { tape } = this.state;
+      this.setState({offset: config.offsetScreenDisplay, pixels: this.getPixelsFromTape(tape, config.offsetScreenDisplay)})
+    })
+  }
+
+  getPixelsFromTape(tape:any, offset: number) {
+    let indexZero = tape.length/2 - 2
+    return tape.slice(indexZero + offset, indexZero + 340 + offset)
   }
 
   closeModal = () => {
@@ -49,7 +61,7 @@ export default class ScreenDisplayModal extends React.Component<any> {
     for (let i = 0; i < pixels.length; i += 20) {
       rows.push(
         <div key={`row-${i}`} className="pixel-row">
-          {pixels.slice(i, i + 20)}
+          {pixels.slice(i , i + 20)}
         </div>
       );
     }
@@ -57,7 +69,7 @@ export default class ScreenDisplayModal extends React.Component<any> {
     return rows;
   };
   render() {
-    const { showModal } = this.state;
+    const { showModal, offset } = this.state;
 
     return (
       <div>
@@ -68,7 +80,7 @@ export default class ScreenDisplayModal extends React.Component<any> {
                 <div className="draggable-modal-header">
                 <div className='draggable-modal-header--title'>
                     <h2>Display Tela</h2> 
-                    <Tippy content="O display tela utiliza o indices de 0-340 da fita a tela 20x17, cada linha de 20 em 20, caso o valor for 0 a cor é preta caso 1 branca, também (2 = vermelho, 3 = verde, 4 = azul ou hexadecimal que inicia com '#'), é possivel modificar em detalhes>configurações para utilizar um intervalo de indices diferente.">
+                    <Tippy content={"O display tela utiliza o indices de " + (0 + offset) + "-" + (340 + offset) + " da fita a tela 20x17, cada linha de 20 em 20, caso o valor for 0 a cor é preta caso 1 branca, também (2 = vermelho, 3 = verde, 4 = azul ou hexadecimal que inicia com '#'), é possivel modificar em detalhes>configurações para utilizar um intervalo de indices diferente."}>
                       <div className='draggable-modal-header--tooltip-icon'>?</div>
                     </Tippy>
                   </div>

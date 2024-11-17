@@ -38,6 +38,9 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
   componentDidMount() {
     TuringMachineTape.tapeSubject.next(this.initialTapeValue)
     GraphSchematicsManager.onChangeHeadPositionAndTape().subscribe(obj => this.setState({headPosition: obj.headPosition, tape: obj.tape}));
+    GraphSchematicsManager.onChangeStatus().subscribe(status => {
+      this.setState({isFinished: status !== "neutral", isAccepted: status === "accepted"});
+    })
   }
 
 
@@ -114,7 +117,6 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
             <div key={index} className={"turing-machine-tape--tape-item " + (this.props.isPlaying && (this.state.headPosition === index) ? "turing-machine-tape--actual-step" : "")}>
               <div className="turing-machine-tape--index">{index + 2 -tape.length/2}</div>
               <input
-                type="number"
                 className="turing-machine-tape--tape-item-content"
                 value={value}
                 onChange={(event) => this.handleChange(index, event)}

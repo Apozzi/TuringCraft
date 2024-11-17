@@ -12,7 +12,8 @@ export default class DataBar extends React.Component<any> {
       id: 0,
       label: '',
       visitCount: 0,
-      sound: { value: '', type: 'note'}
+      sound: { value: '', type: 'note'},
+      isFinal: false
     },
     edges: [],
     vertices: [],
@@ -70,6 +71,21 @@ export default class DataBar extends React.Component<any> {
     });
   };
 
+  handleFinalVertexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isFinal = event.target.checked;
+    this.setState({
+      selectedVertex: {
+        ...this.state.selectedVertex,
+        isFinal
+      }
+    });
+  
+    GraphSchematicsManager.changeVertex({
+      ...this.state.selectedVertex,
+      isFinal
+    });
+  };
+
   getEdgeLabel(edge:any) {
     return edge.source + '-' + edge.target;
   }
@@ -102,6 +118,18 @@ export default class DataBar extends React.Component<any> {
               )
             })}
           </select>
+
+          <div style={{paddingTop: '15px', paddingLeft: '20px'}}>
+              <label className="sound-info-label">
+                <input 
+                  type="checkbox" 
+                  checked={selectedVertex.isFinal} 
+                  onChange={this.handleFinalVertexChange}
+                />
+                <span className="switch"></span>
+                <div className='switch-text'>É Vert. Final?</div>
+              </label>
+            </div>
 
           <h3><FormattedMessage id={"edge_header"}/></h3>
           <ul>

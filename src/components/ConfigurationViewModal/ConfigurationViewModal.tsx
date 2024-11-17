@@ -14,6 +14,7 @@ import { Locale } from '../../i18n/messages';
 interface State {
   showModal: boolean;
   speed: number;
+  offsetScreenDisplay: number;
   showSoundInfo: boolean;
   language: string;
 }
@@ -33,6 +34,7 @@ export default class ConfigurationViewModal extends React.Component<any, State> 
   state: State = {
     showModal: false,
     speed: 1,
+    offsetScreenDisplay: 0,
     showSoundInfo: false,
     language: LOCALES.PORTUGUESE
   };
@@ -57,7 +59,11 @@ export default class ConfigurationViewModal extends React.Component<any, State> 
     const newSpeed = parseFloat(event.target.value);
     this.setState({ speed: newSpeed });
   }
-
+  
+  handleOffsetScreenDisplayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newOffset = parseFloat(event.target.value);
+    this.setState({ offsetScreenDisplay: newOffset });
+  }
   handleShowSoundInfoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ showSoundInfo: event.target.checked });
   }
@@ -69,10 +75,10 @@ export default class ConfigurationViewModal extends React.Component<any, State> 
   }
 
   applyChanges = () => {
-    let { speed } = this.state;
+    let { speed, offsetScreenDisplay } = this.state;
     GraphSchematicsManager.toggleSongInfo(this.state.showSoundInfo);
     GraphSchematicsManager.setConfig({
-      speed
+      speed, offsetScreenDisplay
     });
     toast('Salvo com Sucesso.');
     this.handleCloseModal();
@@ -113,6 +119,24 @@ export default class ConfigurationViewModal extends React.Component<any, State> 
                   onChange={this.handleSpeedChange}
                 />
                 <span>{this.state.speed}x</span>
+              </div>
+            </div>
+
+            {/* Offset do Display Tela */}
+            <div className='pad-15'>
+              <div className="offset">
+                <label htmlFor="offset">Offset do Display Tela:</label>
+                <input 
+                  className="offset-input"
+                  type="range"
+                  id="offset"
+                  min="-2000"
+                  max="2000"
+                  step="50"
+                  value={this.state.offsetScreenDisplay}
+                  onChange={this.handleOffsetScreenDisplayChange}
+                />
+                <span>{this.state.offsetScreenDisplay}+</span>
               </div>
             </div>
 

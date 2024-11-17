@@ -10,4 +10,5 @@ export interface Vertex {
       type: 'note' | 'custom';
       value: NotaMusical | string;
     };
+    isFinal: boolean
   }

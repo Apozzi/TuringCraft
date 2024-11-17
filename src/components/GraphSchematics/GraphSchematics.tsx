@@ -124,13 +124,14 @@ export default class GraphSchematics extends React.Component<{}, {
             if (vertice.id === data.id) {
               return {
                 ...vertice,
-                label: data.label
+                label: data.label,
+                isFinal:  data.isFinal
               }
             }
             return vertice
           })
-        });
-        GraphSchematicsManager.changeVerticeArray(this.state.vertices);
+        }, () => GraphSchematicsManager.changeVerticeArray(this.state.vertices));
+        this.forceUpdate();
       });
       GraphSchematicsManager.onDeleteEdge().subscribe((edge:any) => {
         this.setState((prevState:any) => {
@@ -311,11 +312,17 @@ export default class GraphSchematics extends React.Component<{}, {
 
   runMachine = async () => {
     while (this.state.isRunning) {
+      GraphSchematicsManager.changeStatus("neutral");
       const { tape, headPosition } = this.state;
       GraphSchematicsManager.changeHeadPositionAndTape(headPosition, tape);
       await new Promise(resolve => setTimeout(resolve, 500 / this.state.config.speed));
       const hasNextStep = this.moveToNextVertex();
       if (!hasNextStep) {
+        if (this.state.vertices.find(v => v.id === this.state.actualVertex)?.isFinal) {
+          GraphSchematicsManager.changeStatus("accepted");
+        } else {
+          GraphSchematicsManager.changeStatus("rejected");
+        }
         this.stopMachine();
         break;
       }
@@ -556,7 +563,7 @@ export default class GraphSchematics extends React.Component<{}, {
     if (!isOverlapping) {
       nextVertexId +=1;
       this.setState((prevState: any) => {
-        const newState = [...prevState.vertices, { id: nextVertexId, x: newX, y: newY, label, visitCount: 0, sound: {type: 'note', value: NotaMusical.LA} }]
+        const newState = [...prevState.vertices, { id: nextVertexId, x: newX, y: newY, label, visitCount: 0, sound: {type: 'note', value: NotaMusical.LA}, isFinal: false }]
         GraphSchematicsManager.changeVerticeArray(newState);
         return {
         vertices: newState
@@ -620,13 +627,17 @@ export default class GraphSchematics extends React.Component<{}, {
   }
 
   renderVertices() {
-    const { vertices, scale, selectedVertex, actualVertex} = this.state;
-  
+    const { vertices, scale, selectedVertex, actualVertex } = this.state;
+
     return vertices.map((vertex) => (
-      <g key={vertex.id} transform={`translate(${vertex.x * scale},${vertex.y * scale})`} onMouseDown={(event) => this.handleVertexMouseDown(event, vertex.id)}>
+      <g 
+        key={vertex.id} 
+        transform={`translate(${vertex.x * scale},${vertex.y * scale})`} 
+        onMouseDown={(event) => this.handleVertexMouseDown(event, vertex.id)}
+      >
         {selectedVertex === vertex.id && (
           <>
-            <rect transform={`scale(${1/this.state.scale})`}
+            <rect transform={`scale(${1 / this.state.scale})`}
               x={(-vertexRadius - selectionBorderSize) * scale}
               y={(-vertexRadius - selectionBorderSize) * scale}
               width={(vertexRadius + selectionBorderSize) * 2 * scale}
@@ -639,7 +650,7 @@ export default class GraphSchematics extends React.Component<{}, {
             <g
               onMouseDown={() => this.deleteVertex(vertex.id)}
               style={{ cursor: 'pointer' }}
-              transform={`translate(${(vertexRadius + selectionBorderSize - 15) }, ${(-vertexRadius - selectionBorderSize - 15) })`}
+              transform={`translate(${(vertexRadius + selectionBorderSize - 15)}, ${(-vertexRadius - selectionBorderSize - 15)})`}
             >
               <rect width="30" height="30" rx="5" ry="5" />
               <foreignObject x="0" y="0" width="30" height="30" className='graph-schematics--trash-icon-container'>
@@ -648,6 +659,7 @@ export default class GraphSchematics extends React.Component<{}, {
             </g>
           </>
         )}
+
         <defs>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
@@ -659,11 +671,41 @@ export default class GraphSchematics extends React.Component<{}, {
             </feMerge>
           </filter>
         </defs>
-        <circle cx={0} cy={0} r={vertexRadius} fill={actualVertex === vertex.id ? "#5b3146" : "rgb(75 52 63)"} filter={actualVertex === vertex.id ? "url(#glow)" : ''}/>
-        <text x={0} y={9} textAnchor="middle" fill="white" fontSize={30}>{vertex.label}</text>
+
+        {/* Outer Circle */}
+        <circle 
+          cx={0} 
+          cy={0} 
+          r={vertexRadius} 
+          fill={actualVertex === vertex.id ? "#5b3146" : "rgb(75 52 63)"} 
+          filter={actualVertex === vertex.id ? "url(#glow)" : ''}
+        />
+
+        {/* Inner Circle for Final Vertex */}
+        {vertex.isFinal && (
+          <circle 
+            cx={0} 
+            cy={0} 
+            r={vertexRadius * 0.8} // Adjust the size of the inner circle
+            fill="none" 
+            stroke="white" 
+            strokeWidth="2"
+          />
+        )}
+
+        {/* Vertex Label */}
+        <text 
+          x={0} 
+          y={9} 
+          textAnchor="middle" 
+          fill="white" 
+          fontSize={30}
+        >
+          {vertex.label}
+        </text>
       </g>
     ));
-  }
+}
 
   renderEdges() {
     const { vertices, edges, scale } = this.state;
