@@ -125,7 +125,7 @@ export default class ConfigurationViewModal extends React.Component<any, State> 
             {/* Offset do Display Tela */}
             <div className='pad-15'>
               <div className="offset">
-                <label htmlFor="offset">Offset do Display Tela:</label>
+                <label htmlFor="offset"><FormattedMessage id={"offset_screen_display"}/>:</label>
                 <input 
                   className="offset-input"
                   type="range"

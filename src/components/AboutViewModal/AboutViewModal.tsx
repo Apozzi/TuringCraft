@@ -74,7 +74,7 @@ export default class AboutViewModal extends React.Component<any> {
           2024 Anderson R. Pozzi.<br></br>
           <FormattedMessage id={"all_rights_reserved"}/><br></br><br></br>
 
-           <FormattedMessage id={"Contato"}/>:<br></br>
+           <FormattedMessage id={"contact"}/>:<br></br>
               eanderea1@gmail.com<br></br>
               adeveloper.com.br
           </pre>

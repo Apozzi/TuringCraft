@@ -5,7 +5,6 @@ import AlphabetIterator from "./AlphabetIterator";
 
 
 const documentobj: any = document ? document : {};
-let isOverButton = true;
 
 const createCloneObject = (objectId: String) => {
     if (objectId != "vertice") return;

@@ -48,6 +48,10 @@ export default class NavBar extends React.Component<any> {
     GraphSchematicsManager.loadGraphState({});
   };
 
+  openExampleBinaryCounter = () => {
+    GraphSchematicsManager.loadGraphState({});
+  };
+
   render() {
     return (
       <div className="navbar">
@@ -87,6 +91,7 @@ export default class NavBar extends React.Component<any> {
           </div>
           <div className="subnav--content">
             <a onClick={() => this.openExampleCiclicLoop()}><FormattedMessage id={"infinite_loop_example"}/></a>
+            <a onClick={() => this.openExampleBinaryCounter()}><FormattedMessage id={"binary_counter_example"}/></a>
           </div>
         </div>
 

@@ -47,7 +47,7 @@ export default class DigitalNumbersDisplayModal extends React.Component<any> {
                 <div className="draggable-modal-header">
                   <div className='draggable-modal-header--title'>
                     <h2>Display Numérico</h2> 
-                    <Tippy content="O display númerico utiliza o indices de 0-6 da fita e converte a representação binária em decimal.">
+                    <Tippy content={"O display númerico utiliza o indices de 0-6 da fita e converte a representação binária em decimal."}>
                       <div className='draggable-modal-header--tooltip-icon'>?</div>
                     </Tippy>
                   </div>
