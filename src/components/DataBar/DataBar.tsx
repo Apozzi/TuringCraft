@@ -127,7 +127,7 @@ export default class DataBar extends React.Component<any> {
                   onChange={this.handleFinalVertexChange}
                 />
                 <span className="switch"></span>
-                <div className='switch-text'>É Vert. Final?</div>
+                <div className='switch-text'><FormattedMessage id={"end_vertex"}/></div>
               </label>
             </div>
 

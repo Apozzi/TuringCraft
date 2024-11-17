@@ -5,9 +5,10 @@ import './DigitalNumbersDisplayModal.css';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import TuringMachineTape from '../TuringMachineTape/TuringMachineTape';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 
-export default class DigitalNumbersDisplayModal extends React.Component<any> {
+class DigitalNumbersDisplayModal extends React.Component<any> {
   static openSubject = new Subject();
 
   state = {
@@ -36,6 +37,7 @@ export default class DigitalNumbersDisplayModal extends React.Component<any> {
 
   render() {
     const { showModal } = this.state;
+    const { intl } = this.props;
 
     return (
       <div>
@@ -46,8 +48,8 @@ export default class DigitalNumbersDisplayModal extends React.Component<any> {
               <div className="draggable-modal-container" style={{minHeight: '363px', width: '338px'}}>
                 <div className="draggable-modal-header">
                   <div className='draggable-modal-header--title'>
-                    <h2>Display Numérico</h2> 
-                    <Tippy content={"O display númerico utiliza o indices de 0-6 da fita e converte a representação binária em decimal."}>
+                    <h2><FormattedMessage id={'numeric_display'}/></h2> 
+                    <Tippy content={intl.formatMessage({ id: 'display_digitar_number_tip' })}>
                       <div className='draggable-modal-header--tooltip-icon'>?</div>
                     </Tippy>
                   </div>
@@ -71,3 +73,7 @@ export default class DigitalNumbersDisplayModal extends React.Component<any> {
     );
   }
 }
+
+export default injectIntl(DigitalNumbersDisplayModal) as unknown as typeof DigitalNumbersDisplayModal;
+
+

@@ -5,8 +5,9 @@ import './ScreenDisplayModal.css';
 import Tippy from '@tippyjs/react';
 import TuringMachineTape from '../TuringMachineTape/TuringMachineTape';
 import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-export default class ScreenDisplayModal extends React.Component<any> {
+class ScreenDisplayModal extends React.Component<any> {
   static openSubject = new Subject();
 
   state = {
@@ -70,6 +71,7 @@ export default class ScreenDisplayModal extends React.Component<any> {
   };
   render() {
     const { showModal, offset } = this.state;
+    const { intl } = this.props;
 
     return (
       <div>
@@ -79,8 +81,8 @@ export default class ScreenDisplayModal extends React.Component<any> {
               <div className="draggable-modal-container">
                 <div className="draggable-modal-header">
                 <div className='draggable-modal-header--title'>
-                    <h2>Display Tela</h2> 
-                    <Tippy content={"O display tela utiliza o indices de " + (0 + offset) + "-" + (340 + offset) + " da fita a tela 20x17, cada linha de 20 em 20, caso o valor for 0 a cor é preta caso 1 branca, também (2 = vermelho, 3 = verde, 4 = azul ou hexadecimal que inicia com '#'), é possivel modificar em detalhes>configurações para utilizar um intervalo de indices diferente."}>
+                    <h2><FormattedMessage id={'screen_display'}/></h2> 
+                    <Tippy content={intl.formatMessage({ id: 'display_msg_tip_1' })  + (0 + offset) + "-" + (340 + offset) + intl.formatMessage({ id: 'display_msg_tip_2' })}>
                       <div className='draggable-modal-header--tooltip-icon'>?</div>
                     </Tippy>
                   </div>
@@ -101,3 +103,5 @@ export default class ScreenDisplayModal extends React.Component<any> {
     );
   }
 }
+
+export default injectIntl(ScreenDisplayModal) as unknown as typeof ScreenDisplayModal;

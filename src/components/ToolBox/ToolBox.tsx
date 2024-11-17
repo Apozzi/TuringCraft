@@ -5,21 +5,31 @@ import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager.ts
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartSimple } from '@fortawesome/free-solid-svg-icons';
 import GraphViewModal from '../GraphViewModal/GraphViewModal';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-export default class ToolBox extends React.Component<{callbackPlaying : any}> {
+interface ToolBoxProps {
+  callbackPlaying: any;
+  intl: any;
+}
 
+interface ToolBoxState {
+  isPlaying: boolean;
+}
+
+
+class ToolBox extends React.Component<ToolBoxProps, ToolBoxState> {
   state = {
     isPlaying: false
   };
 
   componentDidMount() {
     GraphSchematicsManager.exitCreationMode().subscribe(() => this.forceUpdate());
-    GraphSchematicsManager.isPlaying().subscribe((isPlaying) => this.setState({isPlaying}));
+    GraphSchematicsManager.isPlaying().subscribe((isPlaying:any) => this.setState({isPlaying}));
   }
 
   onClickButton(objectId: String) {
-    SimulatorUtils.cloneObject(objectId);
+    const { intl } = this.props;
+    SimulatorUtils.cloneObject(objectId, intl);
   }
 
   togglePlayButton() {
@@ -57,9 +67,9 @@ export default class ToolBox extends React.Component<{callbackPlaying : any}> {
           <div className="toolbox-icon"><FontAwesomeIcon icon={faChartSimple} /></div>
           <div className="toolbox-text"><FormattedMessage id={"graphics"}/></div>
         </div>
-        
       </div>
     )
   }
-
 }
+
+export default injectIntl(ToolBox) as unknown as typeof ToolBox;

@@ -24,7 +24,7 @@ const createCloneObject = (objectId: String) => {
 const windowOffsetX = 170;
 const windowOffsetY= 60;
 
-const cloneFunction = (gateId : String) => {
+const cloneFunction = (gateId : String, intl: any) => {
   let dragId = gateId + "Drag";
   let clone = createCloneObject(gateId);
   if (!clone) return;
@@ -32,8 +32,8 @@ const cloneFunction = (gateId : String) => {
   documentobj.onmousemove = (e: any) => {
     let d = documentobj.getElementById(dragId);
     if (d) {
-        d.style.left = e.pageX - 40 +'px';
-        d.style.top = e.pageY - 88 +'px';
+        d.style.left = e.pageX - 48 +'px';
+        d.style.top = e.pageY - 48 +'px';
     }
   };
   documentobj.querySelector('.toolbox').appendChild( clone );
@@ -44,7 +44,8 @@ const cloneFunction = (gateId : String) => {
     if (x > 138) {
       GraphSchematicsManager.addVertex({x, y, label:AlphabetIterator.getNextLetter()});
     } else {
-      toast("Voce deve arrastar o vertice para uma região válida.")
+      toast(intl.formatMessage({ id: 'drag_vertice_valid_area' }))
+     
     }
     if (clone) {
       clone.remove();
@@ -103,8 +104,8 @@ export function convexHull(vertices: any[]): any[] {
 
 
 export default class SimulatorUtils {
-    public static cloneObject(gateId : String) {
-        cloneFunction(gateId);
+    public static cloneObject(gateId : String, intl: any) {
+        cloneFunction(gateId, intl);
     }
     
     public static calculateConvexHull(vertices: any[]): any[] {

@@ -71,6 +71,13 @@ export const messages: Record<Locale, {
   display_msg_tip_2: string;
   display_digitar_number_tip: string;
   offset_screen_display: string;
+  saved_successfully: string;
+  same_io_error: string;
+  add_edge_without_vertice: string;
+  drag_vertice_valid_area: string;
+  screen_display: string;
+  numeric_display: string;
+  end_vertex: string;
 }> = {
   'en': {
     add_vertex: "Add Vertex",
@@ -142,7 +149,14 @@ export const messages: Record<Locale, {
     display_msg_tip_1: "The screen display uses the indices from ",
     display_msg_tip_2: " of the tape to render a 20x17 screen, with each line spanning 20 indices. If the value is 0, the color is black; if 1, white. Additionally, (2 = red, 3 = green, 4 = blue, or hexadecimal starting with '#'). You can modify this in details>settings to use a different range of indices.",
     display_digitar_number_tip: "The numeric display uses indices 0-6 of the tape and converts the binary representation into decimal.",
-    offset_screen_display: "Screen Display Offset"
+    offset_screen_display: "Screen Display Offset",
+    screen_display: "Screen Display",
+    saved_successfully: "Saved Successfully.",
+    same_io_error: "This transition already exists! (Same I/O)",
+    add_edge_without_vertice: "It is not possible to add edges without any vertices.",
+    drag_vertice_valid_area:  "You must drag the vertex to a valid area.",
+    numeric_display: "Numeric Display",
+    end_vertex: "Is it an End Vertex?"
   },
   'pt': {
     add_vertex: "Adicionar Vértice",
@@ -214,6 +228,13 @@ export const messages: Record<Locale, {
     display_msg_tip_1: "O display tela utiliza o indices de ",
     display_msg_tip_2: " da fita a tela 20x17, cada linha de 20 em 20, caso o valor for 0 a cor é preta caso 1 branca, também (2 = vermelho, 3 = verde, 4 = azul ou hexadecimal que inicia com '#'), é possivel modificar em detalhes>configurações para utilizar um intervalo de indices diferente.",
     display_digitar_number_tip: "O display númerico utiliza o indices de 0-6 da fita e converte a representação binária em decimal.",
-    offset_screen_display: "Offset do Display Tela"
+    offset_screen_display: "Offset do Display Tela",
+    screen_display: "Display Tela",
+    saved_successfully: "Salvo com sucesso.",
+    same_io_error: "Essa transição já existe! (I/O iguais)",
+    add_edge_without_vertice: "Não é possivel adicionar arrestas com nenhum vertice.",
+    drag_vertice_valid_area:  "Você deve arrastar o vértice para uma região válida.",
+    numeric_display: "Display Numérico",
+    end_vertex: "É Vert. Final?"
   }
 };

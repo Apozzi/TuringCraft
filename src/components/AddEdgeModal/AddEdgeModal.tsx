@@ -6,7 +6,7 @@ import './AddEdgeModal.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import toast from 'react-hot-toast';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
 
 interface Transition {
@@ -23,7 +23,7 @@ interface State {
   newTransition: Transition;
 }
 
-export default class AddEdgeModal extends React.Component<any, State> {
+class AddEdgeModal extends React.Component<any, State> {
   static openSubject = new Subject();
 
   customStyles = {
@@ -81,9 +81,10 @@ export default class AddEdgeModal extends React.Component<any, State> {
 
   handleAddTransition = () => {
     const { newTransition } = this.state;
+    const { intl } = this.props;
 
     if (this.checkDuplicateTransition(newTransition)) {
-      toast.error('Essa transição já existe! (I/O iguais)');
+      toast.error(intl.formatMessage({ id: 'same_io_error' }));
       return;
     }
 
@@ -229,9 +230,10 @@ export default class AddEdgeModal extends React.Component<any, State> {
               </button>
             </div>
           </div>
-          
         </Modal>
       </div>
     );
   }
 }
+
+export default injectIntl(AddEdgeModal) as unknown as typeof AddEdgeModal;
