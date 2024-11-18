@@ -53,7 +53,8 @@ qAccept,_,-
           const targetState = `q${targetId}`;
           
           transitions.push(`${sourceState},${rule.read}
-${targetState},${rule.write},${rule.move === "R" ? ">" : "<"}`
+${targetState},${rule.write},${rule.move === "R" ? ">" : "<"}
+`
           );
         });
       });
