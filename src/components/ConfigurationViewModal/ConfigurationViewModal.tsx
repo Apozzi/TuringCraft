@@ -17,7 +17,10 @@ interface State {
   offsetScreenDisplay: number;
   showSoundInfo: boolean;
   language: string;
+  useEmptyTapeValue: boolean;
 }
+
+const CACHE_KEY = 'turingConfig';
 
 class ConfigurationViewModal extends React.Component<any, State> {
   static openSubject = new Subject();
@@ -31,13 +34,15 @@ class ConfigurationViewModal extends React.Component<any, State> {
     }
   };
 
-  state: State = {
+  defaultState: State = {
     showModal: false,
     speed: 1,
     offsetScreenDisplay: 0,
     showSoundInfo: false,
-    language: LOCALES.PORTUGUESE
+    language: LOCALES.PORTUGUESE,
+    useEmptyTapeValue: false 
   };
+  state: State = this.defaultState;
 
   static openModal(obj: any) {
     this.openSubject.next(obj);
@@ -45,14 +50,59 @@ class ConfigurationViewModal extends React.Component<any, State> {
 
   componentDidMount() {
     Modal.setAppElement('#app');
+    const cachedState = this.loadFromCache();
+    this.setState(cachedState);
+    GraphSchematicsManager.setConfig({
+      speed: cachedState.speed,
+      offsetScreenDisplay: cachedState.offsetScreenDisplay,
+      useEmptyTapeValue: cachedState.useEmptyTapeValue
+    });
+    GraphSchematicsManager.toggleSongInfo(cachedState.showSoundInfo);
     ConfigurationViewModal.openSubject.subscribe(() => {
       this.setState({ showModal: true });
       GraphSchematicsManager.setPlayOrStop(false);
     });
   }
 
+  loadFromCache = () => {
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const parsedCache = JSON.parse(cached);
+        return {
+          ...this.defaultState,
+          ...parsedCache,
+          showModal: this.defaultState.showModal
+        };
+      }
+    } catch (error) {
+      toast.error('Erro ao carregar cache');
+    }
+    return this.defaultState;
+  };
+
+  saveToCache = (state: Partial<State>) => {
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      const currentCache = cached ? JSON.parse(cached) : {};
+      const newCache = {
+        ...currentCache,
+        ...state
+      };
+      delete newCache.showModal;
+      
+      localStorage.setItem(CACHE_KEY, JSON.stringify(newCache));
+    } catch (error) {
+      toast.error('Erro ao carregar cache');
+    }
+  };
+
   handleCloseModal = () => {
     this.setState({ showModal: false });
+  }
+
+  handleEmptyTapeValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ useEmptyTapeValue: event.target.checked });
   }
 
   handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,11 +125,18 @@ class ConfigurationViewModal extends React.Component<any, State> {
   }
 
   applyChanges = () => {
-    let { speed, offsetScreenDisplay } = this.state;
+    let { speed, offsetScreenDisplay, useEmptyTapeValue, showSoundInfo, language  } = this.state;
     const { intl } = this.props;
+    this.saveToCache({
+      speed,
+      offsetScreenDisplay,
+      useEmptyTapeValue,
+      showSoundInfo,
+      language
+    });
     GraphSchematicsManager.toggleSongInfo(this.state.showSoundInfo);
     GraphSchematicsManager.setConfig({
-      speed, offsetScreenDisplay
+      speed, offsetScreenDisplay, useEmptyTapeValue 
     });
     toast(intl.formatMessage({ id: 'saved_successfully' }));
     this.handleCloseModal();
@@ -174,6 +231,18 @@ class ConfigurationViewModal extends React.Component<any, State> {
                   {/* Adicione outros idiomas suportados com ícones apropriados */}
                 </select>
               </div>
+            </div>
+
+            <div className='pad-15'>
+              <label className="sound-info-label">
+                <input 
+                  type="checkbox" 
+                  checked={this.state.useEmptyTapeValue} 
+                  onChange={this.handleEmptyTapeValueChange}
+                />
+                <span className="switch"></span>
+                <div className='switch-text'>Usar valor vazio na fita como padrão <span className="comment">("B" também será considerado como vazio)</span></div>
+              </label>
             </div>
 
             <div className='pad-15'>

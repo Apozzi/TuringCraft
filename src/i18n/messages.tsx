@@ -10,7 +10,7 @@ export const messages: Record<Locale, {
   examples: string;
   graph_layout_and_organization: string;
   graph_layout: string;
-  details: string;
+  config: string;
   about: string;
   circular_layout: string;
   radial_layout: string;
@@ -89,7 +89,7 @@ export const messages: Record<Locale, {
     examples: "Examples",
     graph_layout_and_organization: "Graph Layout",
     graph_layout: "Graph Layout",
-    details: "Details",
+    config: "Settings",
     about: "About",
     circular_layout: "Circular Layout",
     radial_layout: "Radial Layout",
@@ -100,7 +100,7 @@ export const messages: Record<Locale, {
     kamada_kawai: "Kamada-Kawai Algorithm",
     transition_matrix: "Transition Matrix",
     custom_sounds: "Custom Sounds",
-    configurations: "Configurations",
+    configurations: "General Settings",
     periodic_example: "Periodic",
     counter_example: "Counter",
     two_communication_classes_example: "Two Communication Classes",
@@ -147,7 +147,7 @@ export const messages: Record<Locale, {
     infinite_loop_example: "Ciclic Loop",
     binary_counter_example: "Binary Counter",
     display_msg_tip_1: "The screen display uses the indices from ",
-    display_msg_tip_2: " of the tape to render a 20x17 screen, with each line spanning 20 indices. If the value is 0, the color is black; if 1, white. Additionally, (2 = red, 3 = green, 4 = blue, or hexadecimal starting with '#'). You can modify this in details>settings to use a different range of indices.",
+    display_msg_tip_2: " of the tape to render a 20x17 screen, with each line spanning 20 indices. If the value is 0, the color is black; if 1, white. Additionally, (2 = red, 3 = green, 4 = blue, or hexadecimal starting with '#'). You can modify this in settings>general settings to use a different range of indices.",
     display_digitar_number_tip: "The numeric display uses indices 0-6 of the tape and converts the binary representation into decimal.",
     offset_screen_display: "Screen Display Offset",
     screen_display: "Screen Display",
@@ -168,7 +168,7 @@ export const messages: Record<Locale, {
     examples: "Exemplos",
     graph_layout_and_organization: "Layout / Organização do Grafo",
     graph_layout: "Layout do Grafo",
-    details: "Detalhes",
+    config: "Configurações",
     about: "Sobre",
     circular_layout: "Layout Circular",
     radial_layout: "Layout Radial",
@@ -179,7 +179,7 @@ export const messages: Record<Locale, {
     kamada_kawai: "Algoritmo de Kamada-Kawai",
     transition_matrix: "Matriz de Transição",
     custom_sounds: "Customização de Sons",
-    configurations: "Configurações",
+    configurations: "Configuração Geral",
     periodic_example: "Periódico",
     counter_example: "Contador",
     two_communication_classes_example: "Duas classes de Sem Comunicação",

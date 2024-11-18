@@ -55,3 +55,8 @@
 .offset-input{
   content: "+"
 }
+
+.comment {
+  font-size: smaller;
+  color: #ff9b006b;
+}

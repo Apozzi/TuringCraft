@@ -176,6 +176,7 @@ h3, h4 {
   margin-right: 20px;
   font-size: 15px;
   margin-bottom: 3px;
+  max-width: 272px;
 }
 
 .pad-15 {

@@ -9,15 +9,27 @@ export default class AlphabetIterator {
     }
   
     static getNextLetter(): string {
-        const letter = String.fromCharCode(65 + this.currentIndex);
-        this.currentIndex = (this.currentIndex + 1) % 26;
-        if (GraphSchematicsManager.getGraphState()?.vertices && GraphSchematicsManager.getGraphState()?.vertices.find((v:Vertex) => v.label === letter)) {
-            return this.getNextLetter();
-        }
-        return letter;
+        const getLabel = () => {
+            const letterIndex = this.currentIndex % 26;
+            const numberPart = Math.floor(this.currentIndex / 26);
+            return numberPart === 0 
+                ? String.fromCharCode(65 + letterIndex) 
+                : `${String.fromCharCode(65 + letterIndex)}${numberPart}`;
+        };
+    
+        const isLabelUsed = (label: string) => 
+            GraphSchematicsManager.getGraphState()?.vertices?.some((v: Vertex) => v.label === label);
+    
+        let label;
+        do {
+            label = getLabel();
+            this.currentIndex++;
+        } while (isLabelUsed(label));
+    
+        return label;
     }
 
     static subIndex() {
-        this.currentIndex = (this.currentIndex - 1) % 26;
+        this.currentIndex--;
     }
 }

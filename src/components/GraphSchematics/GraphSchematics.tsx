@@ -333,11 +333,17 @@ export default class GraphSchematics extends React.Component<{}, {
     this.setState({ isRunning: false });
   };
 
+  private getTreatEmptyValue(e: any) {
+    const r = String(e);
+    if (r.trim() === "") return "B";
+    return r;
+  }
+
   moveToNextVertex = () => {
     const { actualVertex, edges, edgeWeights, tape, headPosition } = this.state;
     if (actualVertex === null) return;
   
-    const currentSymbol = tape[headPosition];
+    const currentSymbol = this.getTreatEmptyValue(tape[headPosition]);
     let transitionFound = false;
     let nextVertex = null;
     let selectedTransition = null;
@@ -345,7 +351,7 @@ export default class GraphSchematics extends React.Component<{}, {
     const possibleEdges = edges.filter(edge => edge.source === actualVertex);
     for (const edge of possibleEdges) {
       const transitions = edgeWeights[edge.source]?.[edge.target] || [];
-      const validTransition = transitions.find(transition => String(transition.read) === String(currentSymbol));
+      const validTransition = transitions.find(transition => this.getTreatEmptyValue(transition.read) === currentSymbol);
       if (validTransition) {
         nextVertex = edge.target;
         selectedTransition = validTransition;
@@ -363,7 +369,7 @@ export default class GraphSchematics extends React.Component<{}, {
       else if (selectedTransition.move === 'L') newHeadPosition = Math.max(0, newHeadPosition - 1);
       
       if (newHeadPosition >= newTape.length) {
-        newTape.push('B');
+        newTape.push('0');
       }
 
       this.setState(prevState => {

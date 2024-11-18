@@ -112,7 +112,7 @@ export default class NavBar extends React.Component<any> {
 
         <div className="navbar--button-with-subnav">
           <div className="navbar--button">
-            <div className="navbar--arrow-icon">▼</div> <FormattedMessage id={"details"}/>
+            <div className="navbar--arrow-icon">▼</div> <FormattedMessage id={"config"}/>
           </div>
           <div className="subnav--content">
             <a onClick={() => CustomVerticeSongViewModal.openModal({})}><FormattedMessage id={"custom_sounds"}/></a>

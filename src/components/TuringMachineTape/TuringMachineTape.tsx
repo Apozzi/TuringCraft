@@ -14,15 +14,18 @@ interface TuringMachineTapeProps {
 
 interface TuringMachineTapeState {
   isPlaying: boolean;
-  tape: number[];
+  tape: string[];
   xTranslation: number;
   headPosition: number;
   isFinished: boolean;
   isAccepted: boolean;
+  useEmptyTapeValue: boolean;
 }
 
+const initialTapeSize = 1000;
+
 export default class TuringMachineTape extends React.Component<TuringMachineTapeProps> {
-  initialTapeValue = Array(1000).fill(0);
+  initialTapeValue = Array(initialTapeSize).fill("0");
   
   state : TuringMachineTapeState  = {
     isPlaying: false,
@@ -30,7 +33,8 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
     headPosition: 0,
     xTranslation: 0,
     isFinished: false,
-    isAccepted: false
+    isAccepted: false,
+    useEmptyTapeValue: false
   };
 
   private static tapeSubject = new Subject();
@@ -41,6 +45,13 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
     GraphSchematicsManager.onChangeStatus().subscribe(status => {
       this.setState({isFinished: status !== "neutral", isAccepted: status === "accepted"});
     })
+    GraphSchematicsManager.onChangeConfig().subscribe(config => {
+      const { tape } = this.state;
+      this.setState({ 
+        useEmptyTapeValue: config.useEmptyTapeValue, 
+        tape: config.useEmptyTapeValue ? tape.map(e => e === "0" ? "" : e) : Array(initialTapeSize).fill("0")
+      });
+    });
   }
 
 
@@ -57,7 +68,7 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
   }
 
   handleChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number(event.target.value);
+    const newValue = event.target.value;
     this.setState((prevState: TuringMachineTapeState) => {
       const newTape = [...prevState.tape];
       newTape[index] = newValue;
@@ -66,7 +77,8 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
   };
 
   render() {
-    const {tape, xTranslation, isFinished, isAccepted} = this.state;
+    const {tape, xTranslation, isFinished, isAccepted, useEmptyTapeValue} = this.state;
+    const translationSizeInPixels = 400;
     return (
       <div className="turing-machine-tape">
         <ScreenDisplayModal></ScreenDisplayModal>
@@ -111,14 +123,14 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
           </div>
         </div>
         <div className="turing-machine-tape--tape" style={{
-          transform: "translateX("+ xTranslation*400 + "px)"
+          transform: "translateX("+ xTranslation * translationSizeInPixels + "px)"
         }}>
           {tape.map((value, index) => (
             <div key={index} className={"turing-machine-tape--tape-item " + (this.props.isPlaying && (this.state.headPosition === index) ? "turing-machine-tape--actual-step" : "")}>
               <div className="turing-machine-tape--index">{index + 2 -tape.length/2}</div>
               <input
                 className="turing-machine-tape--tape-item-content"
-                value={value}
+                value={useEmptyTapeValue && value === "B" ? "" : value}
                 onChange={(event) => this.handleChange(index, event)}
               />
           </div>
