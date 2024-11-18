@@ -4,9 +4,12 @@ import { Subject } from 'rxjs';
 import './CodeGenerationModal.css';
 import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import generateTuringMachineCode from '../../utils/turingCodeGenerator';
+
 
 interface State {
   showModal: boolean;
+  generatedCode: string;
 }
 
 class CodeGenerationModal extends React.Component<any, State> {
@@ -23,7 +26,10 @@ class CodeGenerationModal extends React.Component<any, State> {
 
   state: State = {
     showModal: false,
+    generatedCode: ''
   };
+
+  private textareaRef = React.createRef<HTMLTextAreaElement>();
 
   static openModal(obj: any) {
     this.openSubject.next(obj);
@@ -32,8 +38,11 @@ class CodeGenerationModal extends React.Component<any, State> {
   componentDidMount() {
     Modal.setAppElement('#app');
 
-    CodeGenerationModal.openSubject.subscribe(() => {
-      this.setState({ showModal: true });
+    CodeGenerationModal.openSubject.subscribe((obj) => {
+      this.setState({ 
+        showModal: true,
+        generatedCode: generateTuringMachineCode(GraphSchematicsManager.getGraphState())
+      });
       GraphSchematicsManager.setPlayOrStop(false);
     });
   }
@@ -42,6 +51,12 @@ class CodeGenerationModal extends React.Component<any, State> {
     this.setState({ showModal: false });
   }
 
+  handleCopyCode = () => {
+    if (this.textareaRef.current) {
+      this.textareaRef.current.select();
+      document.execCommand('copy');
+    }
+  }
 
   render() {
     return (
@@ -55,17 +70,25 @@ class CodeGenerationModal extends React.Component<any, State> {
         >
           <div className="modal-header">
             <div className="modal-title">
-              <FormattedMessage id="Geração de Código"/>
+              <FormattedMessage id="code_generation"/>
             </div>
             <div className="modal-close-icon" onClick={this.handleCloseModal}>
               X
             </div>
           </div>
 
-          <div className='modal-content-extra'> 
-            
-            
-         
+          <div className='terminal-modal-content'> 
+            <div className="terminal-container">
+              <div className="terminal-header">
+                <button onClick={this.handleCopyCode}>Copy</button>
+              </div>
+              <textarea 
+                ref={this.textareaRef}
+                readOnly 
+                className="terminal-textarea" 
+                value={this.state.generatedCode}
+              />
+            </div>
           </div>
         </Modal>
       </div>

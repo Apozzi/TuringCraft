@@ -78,6 +78,7 @@ export const messages: Record<Locale, {
   screen_display: string;
   numeric_display: string;
   end_vertex: string;
+  code_generation: string;
 }> = {
   'en': {
     add_vertex: "Add Vertex",
@@ -156,7 +157,8 @@ export const messages: Record<Locale, {
     add_edge_without_vertice: "It is not possible to add edges without any vertices.",
     drag_vertice_valid_area:  "You must drag the vertex to a valid area.",
     numeric_display: "Numeric Display",
-    end_vertex: "Is it an End Vertex?"
+    end_vertex: "Is it an End Vertex?",
+    code_generation: "Code Generation"
   },
   'pt': {
     add_vertex: "Adicionar Vértice",
@@ -235,6 +237,7 @@ export const messages: Record<Locale, {
     add_edge_without_vertice: "Não é possivel adicionar arrestas com nenhum vertice.",
     drag_vertice_valid_area:  "Você deve arrastar o vértice para uma região válida.",
     numeric_display: "Display Numérico",
-    end_vertex: "É Vert. Final?"
+    end_vertex: "É Vert. Final?",
+    code_generation: "Geração de Código"
   }
 };

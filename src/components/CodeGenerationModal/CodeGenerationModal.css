@@ -4,3 +4,49 @@
     background-color: rgb(16 14 14 / 85%);
     z-index: 102;
 }
+
+.terminal-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+}
+
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #2d2d2d;
+  color: #fff;
+}
+
+.terminal-textarea {
+  flex-grow: 1;
+  background-color: #1e1e1e;
+  color: #00ff00;
+  border: none;
+  padding: 15px;
+  font-family: 'Courier New', monospace;
+  resize: none;
+  outline: none;
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+
+.terminal-header button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.terminal-modal-content {
+  padding-left: 60px;
+  padding-right: 60px;
+  padding-top: 20px;
+  height: calc(100% - 139px);
+}

@@ -130,7 +130,11 @@ export default class GraphSchematics extends React.Component<{}, {
             }
             return vertice
           })
-        }, () => GraphSchematicsManager.changeVerticeArray(this.state.vertices));
+        }, () => {
+          GraphSchematicsManager.changeVerticeArray(this.state.vertices);
+          GraphSchematicsManager.setGraphState(this.state);
+        }
+        );
         this.forceUpdate();
       });
       GraphSchematicsManager.onDeleteEdge().subscribe((edge:any) => {

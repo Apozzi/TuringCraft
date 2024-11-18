@@ -7,6 +7,7 @@ import ConfigurationViewModal from '../ConfigurationViewModal/ConfigurationViewM
 import TreeLayoutConfigViewModal from '../TreeLayoutConfigViewModal/TreeLayoutConfigViewModal';
 import RadialLayoutConfigViewModal from '../RadialLayoutConfigViewModal/RadialLayoutConfigViewModal';
 import { FormattedMessage } from 'react-intl';
+import CodeGenerationModal from '../CodeGenerationModal/CodeGenerationModal';
 
 
 export default class NavBar extends React.Component<any> {
@@ -60,6 +61,7 @@ export default class NavBar extends React.Component<any> {
         <AboutViewModal></AboutViewModal>
         <TreeLayoutConfigViewModal></TreeLayoutConfigViewModal>
         <RadialLayoutConfigViewModal></RadialLayoutConfigViewModal>
+        <CodeGenerationModal></CodeGenerationModal>
         <div className='title' data-text="Turing Craft">
           Turing Craft
         </div>
@@ -108,6 +110,10 @@ export default class NavBar extends React.Component<any> {
             <a onClick={() => GraphSchematicsManager.applyFruchtermanReingold()}><FormattedMessage id={"fruchterman_reingold"}/></a>
             <a onClick={()=> GraphSchematicsManager.applyKamadaKawai()}><FormattedMessage id={"kamada_kawai"}/></a>
           </div>
+        </div>
+
+        <div className="navbar--button" onClick={() => CodeGenerationModal.openModal({})}>
+          <FormattedMessage id={"code_generation"}/>
         </div>
 
         <div className="navbar--button-with-subnav">
