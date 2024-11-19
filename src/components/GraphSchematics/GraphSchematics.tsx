@@ -43,6 +43,7 @@ const initState = {
   actualVertex: null,
   audioContext: null,
   vertexHistory: [],
+  backupInputTape: []
 };
 
 interface TuringTransition {
@@ -83,6 +84,7 @@ export default class GraphSchematics extends React.Component<{}, {
   headPosition: number;
   currentState: number | null;
   isRunning: boolean;
+  backupInputTape: string[];
 }> {
   audioManager: AudioManager;
   private centroidUpdateTimer: any = null;
@@ -305,11 +307,12 @@ export default class GraphSchematics extends React.Component<{}, {
   }
 
   startTuringMachine = () => {
-    const { config, headPosition } = this.state;
+    const { config, headPosition, tape } = this.state;
     this.setState({
       currentState: 0,
       headPosition:  config.continueFromStoppedSimulation && headPosition ? headPosition : this.state.tape.length/2 - 2,
       isRunning: true,
+      backupInputTape: tape
     }, this.runMachine);
   };
 
@@ -335,14 +338,12 @@ export default class GraphSchematics extends React.Component<{}, {
   };
 
   stopMachine = () => {
-    const { config } = this.state;
+    const { config, backupInputTape } = this.state;
     if (config.continueFromStoppedSimulation) {
       this.setState( { isRunning: false });
       return;
     }
-    const initialTapeSize = 1000;
-    const initialTape = Array(initialTapeSize).fill(config.useEmptyTapeValue ? "" : "0");
-    this.setState( { isRunning: false, actualVertex: null, tape: initialTape  });
+    this.setState( { isRunning: false, actualVertex: null, tape: backupInputTape  });
   };
 
   private getTreatEmptyValue(e: any) {
