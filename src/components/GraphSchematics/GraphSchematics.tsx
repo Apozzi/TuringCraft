@@ -299,7 +299,7 @@ export default class GraphSchematics extends React.Component<{}, {
           this.setState({ tape });
           return;
         }
-        this.setState({ tape, headPosition: tape.length / 2 - 2 });
+        this.setState({ tape, headPosition: tape.length / 2 - 2, backupInputTape: tape });
       });
 
     }

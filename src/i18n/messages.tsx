@@ -82,6 +82,7 @@ export const messages: Record<Locale, {
   continue_from_stopped_simulation: string;
   empty_tape_value_msg_1: string;
   empty_tape_value_msg_2: string;
+  palindrome_example: string;
 }> = {
   'en': {
     add_vertex: "Add Vertex",
@@ -164,7 +165,8 @@ export const messages: Record<Locale, {
     code_generation: "Code Generation",
     continue_from_stopped_simulation: "Continue from where simulation stopped",
     empty_tape_value_msg_1: "Use empty value on tape as default",
-    empty_tape_value_msg_2: "'B' will also be considered as empty"
+    empty_tape_value_msg_2: "'B' will also be considered as empty",
+    palindrome_example: "Detector de Palindroma Binária"
   },
   'pt': {
     add_vertex: "Adicionar Vértice",
@@ -247,6 +249,7 @@ export const messages: Record<Locale, {
     code_generation: "Geração de Código",
     continue_from_stopped_simulation: "Continuar da onde parou na Simulação",
     empty_tape_value_msg_1: "Usar valor vazio na fita como padrão",
-    empty_tape_value_msg_2: "'B' também será considerado como vazio"
+    empty_tape_value_msg_2: "'B' também será considerado como vazio",
+    palindrome_example: "Detector de Palindroma Binária"
   }
 };
