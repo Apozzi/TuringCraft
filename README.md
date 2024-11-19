@@ -10,6 +10,11 @@ You just need to create the graph, place the information on the tape and click o
 
 ![a1](https://github.com/user-attachments/assets/34d64003-6cf2-4422-b0b6-591451997311)
 
+# Features
+
+It's includes graphical analysis. 
+Additionally, there visual display for tape segments and a numeric display to represent binary numbers stored on the tape.
+
 # Execution
 
 To run locally, just install `npm run install` and then `npm run dev`. 
