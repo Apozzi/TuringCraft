@@ -12,11 +12,15 @@ You just need to create the graph, place the information on the tape and click o
 
 # Features
 
-- Graphical analysis.
+- Graphical analysis for better insights into computation.
 - Visual pixel display for tape segments.
 - Numeric display to represent binary numbers stored on the tape.
-- Generate code for other turing machine aplications like "https://turingmachinesimulator.com/".
-- Graph Layout Algorithms.
+- Save and load machine states to continue work seamlessly.
+- Customize sounds for different machine states or actions.
+- Generate code for other Turing machine applications, such as [Turing Machine Simulator](https://turingmachinesimulator.com/).
+- Support for graph layout algorithms to visualize machine logic.
+- Intuitive interface for designing and editing Turing machines.
+- Real-time simulation with step-by-step execution and debugging tools.
 
 # Execution
 
