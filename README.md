@@ -4,6 +4,10 @@
 
 Turing Craft is Visual Simulator and Graph Creator for Turing Machines. Perfect for academic purposes, it enables students and researchers to design, simulate, and analyze Turing machines and computational graphs.
 
+# What is a Turing Machine?
+
+A Turing Machine is a mathematical model of computation, first proposed by the mathematician Alan Turing in 1936. It is a theoretical device that manipulates symbols on a strip of tape according to a set of predefined rules. Despite its simplicity, the Turing Machine is a universal model of computation and forms the foundation for modern computer science.
+
 # How it work?
 
 You just need to create the graph, place the information on the tape and click on the green button to simulate.
