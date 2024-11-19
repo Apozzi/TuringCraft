@@ -93,7 +93,7 @@ class AddEdgeModal extends React.Component<any, State> {
       newTransition: {
         input: '',
         output: '',
-        direction: 'left',
+        direction: 'right',
       },
     }));
   };

@@ -564,6 +564,14 @@ export default class GraphSchematics extends React.Component<{}, {
     });
   };
 
+  private getNextAvailableId(): number {
+    const existingIds = new Set(this.state.vertices.map(v => v.id));
+    while (existingIds.has(nextVertexId+1)) {
+      nextVertexId++;
+    }
+    return nextVertexId;
+  }
+
   addVertex = (x: number, y: number, label: string) => {
     const { offsetX, offsetY, scale, vertices } = this.state;
     const newX = (x - offsetX) / (scale ** 2);
@@ -577,7 +585,8 @@ export default class GraphSchematics extends React.Component<{}, {
     });
   
     if (!isOverlapping) {
-      nextVertexId +=1;
+      const newId = this.getNextAvailableId();
+      nextVertexId = newId + 1;
       this.setState((prevState: any) => {
         const newState = [...prevState.vertices, { id: nextVertexId, x: newX, y: newY, label, visitCount: 0, sound: {type: 'note', value: NotaMusical.LA}, isFinal: false }]
         GraphSchematicsManager.changeVerticeArray(newState);
