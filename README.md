@@ -10,7 +10,7 @@ You just need to create the graph, place the information on the tape and click o
 
 ![a1](https://github.com/user-attachments/assets/34d64003-6cf2-4422-b0b6-591451997311)
 
-# Other Features
+# Features
 
 - Graphical analysis.
 - Visual pixel display for tape segments.
