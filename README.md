@@ -30,4 +30,5 @@ To run locally, just install `npm run install` and then `npm run dev`.
 
 Anderson Pozzi (2024).
 
-This project is made using my project https://github.com/Apozzi/markov-builder-js as basis, If you are interested, take a look.
+This project is made using my project https://github.com/Apozzi/markov-builder-js as basis,
+If you are interested, take a look.
