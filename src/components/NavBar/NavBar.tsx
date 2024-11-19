@@ -35,7 +35,13 @@ export default class NavBar extends React.Component<any> {
         const content = e.target?.result as string;
         try {
           const state = JSON.parse(content);
+          state.currentState = null;
+          state.headPosition = null;
+          state.isRunning = false;
+          state.vertexHistory = [];
+          state.actualVertex = null;
           GraphSchematicsManager.loadGraphState(state);
+          GraphSchematicsManager.changeHeadPositionAndTape(state.headPosition, state.tape);
         } catch (error) {
           console.error('Error parsing JSON file:', error);
           alert('Invalid JSON file. Please select a valid graph state file.');
@@ -46,7 +52,7 @@ export default class NavBar extends React.Component<any> {
   };
 
   openExampleCiclicLoop = () => {
-    GraphSchematicsManager.loadGraphState({});
+    GraphSchematicsManager.loadGraphState({"offsetX":246,"offsetY":20,"width":1724,"height":1000,"scale":1,"vertices":[{"id":3,"x":773,"y":175,"label":"C","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":4,"x":777,"y":501,"label":"D","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":2,"x":416,"y":177,"label":"B","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":1,"x":414,"y":496,"label":"A","visitCount":19,"sound":{"type":"note","value":"A"},"isFinal":false}],"edges":[{"source":1,"target":2},{"source":2,"target":3},{"source":3,"target":4},{"source":4,"target":1}],"selectedVertex":null,"draggingVertex":false,"edgeCreationMode":false,"edgeStartVertex":null,"edgeWeights":{"1":{"2":[{"read":"0","write":"1","move":"R"}]},"2":{"3":[{"read":"0","write":"1","move":"L"}]},"3":{"4":[{"read":"1","write":"0","move":"R"}]},"4":{"1":[{"read":"1","write":"0","move":"L"}]}},"audioContext":{},"vertexHistory":[],"centroid":{"x":595,"y":337.25},"centroidUpdateCounter":76,"tape":Array(1000).fill("0"),"config":{"speed":1}});
   };
 
   openExampleBinaryCounter = () => {

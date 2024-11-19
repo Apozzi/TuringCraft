@@ -82,7 +82,7 @@ export default class App extends React.Component {
             }}
           />
           <NavBar></NavBar>
-          <ToolBox callbackPlaying={this.onChangePlayState}></ToolBox>
+          <ToolBox callbackPlaying={this.onChangePlayState} intl></ToolBox>
           <div className='control'>
             <div className='control-top' onMouseDown={() => GraphSchematicsManager.controlMoveUp()}>▲</div>
             <div className='control-left' onMouseDown={() => GraphSchematicsManager.controlMoveLeft()}>◀</div>

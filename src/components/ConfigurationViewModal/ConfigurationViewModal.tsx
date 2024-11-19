@@ -18,6 +18,7 @@ interface State {
   showSoundInfo: boolean;
   language: string;
   useEmptyTapeValue: boolean;
+  continueFromStoppedSimulation: boolean;
 }
 
 const CACHE_KEY = 'turingConfig';
@@ -27,7 +28,7 @@ class ConfigurationViewModal extends React.Component<any, State> {
 
   customStyles = {
     content: {
-      height: '60%',
+      height: '610px',
       background: 'rgb(42 42 49)',
       border: 'none',
       padding: "0px"
@@ -40,7 +41,8 @@ class ConfigurationViewModal extends React.Component<any, State> {
     offsetScreenDisplay: 0,
     showSoundInfo: false,
     language: LOCALES.PORTUGUESE,
-    useEmptyTapeValue: false 
+    useEmptyTapeValue: false,
+    continueFromStoppedSimulation: false
   };
   state: State = this.defaultState;
 
@@ -52,11 +54,13 @@ class ConfigurationViewModal extends React.Component<any, State> {
     Modal.setAppElement('#app');
     const cachedState = this.loadFromCache();
     this.setState(cachedState);
-    GraphSchematicsManager.setConfig({
-      speed: cachedState.speed,
-      offsetScreenDisplay: cachedState.offsetScreenDisplay,
-      useEmptyTapeValue: cachedState.useEmptyTapeValue
-    });
+    setTimeout(() => { // Necessário por causa do Subscribes do outros componentes.
+      GraphSchematicsManager.setConfig({
+        speed: cachedState.speed,
+        offsetScreenDisplay: cachedState.offsetScreenDisplay,
+        useEmptyTapeValue: cachedState.useEmptyTapeValue
+      });
+    }, 10);
     GraphSchematicsManager.toggleSongInfo(cachedState.showSoundInfo);
     ConfigurationViewModal.openSubject.subscribe(() => {
       this.setState({ showModal: true });
@@ -105,6 +109,10 @@ class ConfigurationViewModal extends React.Component<any, State> {
     this.setState({ useEmptyTapeValue: event.target.checked });
   }
 
+  handleContinueFromStoppedSimulationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ continueFromStoppedSimulation: event.target.checked });
+  }
+
   handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSpeed = parseFloat(event.target.value);
     this.setState({ speed: newSpeed });
@@ -114,6 +122,7 @@ class ConfigurationViewModal extends React.Component<any, State> {
     const newOffset = parseFloat(event.target.value);
     this.setState({ offsetScreenDisplay: newOffset });
   }
+
   handleShowSoundInfoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ showSoundInfo: event.target.checked });
   }
@@ -125,18 +134,19 @@ class ConfigurationViewModal extends React.Component<any, State> {
   }
 
   applyChanges = () => {
-    let { speed, offsetScreenDisplay, useEmptyTapeValue, showSoundInfo, language  } = this.state;
+    let { speed, offsetScreenDisplay, useEmptyTapeValue, showSoundInfo, language, continueFromStoppedSimulation  } = this.state;
     const { intl } = this.props;
     this.saveToCache({
       speed,
       offsetScreenDisplay,
       useEmptyTapeValue,
       showSoundInfo,
-      language
+      language,
+      continueFromStoppedSimulation
     });
     GraphSchematicsManager.toggleSongInfo(this.state.showSoundInfo);
     GraphSchematicsManager.setConfig({
-      speed, offsetScreenDisplay, useEmptyTapeValue 
+      speed, offsetScreenDisplay, useEmptyTapeValue, continueFromStoppedSimulation
     });
     toast(intl.formatMessage({ id: 'saved_successfully' }));
     this.handleCloseModal();
@@ -210,6 +220,30 @@ class ConfigurationViewModal extends React.Component<any, State> {
               </label>
             </div>
 
+            <div className='pad-15'>
+              <label className="sound-info-label">
+                <input 
+                  type="checkbox" 
+                  checked={this.state.useEmptyTapeValue} 
+                  onChange={this.handleEmptyTapeValueChange}
+                />
+                <span className="switch"></span>
+                <div className='switch-text'><FormattedMessage id={"empty_tape_value_msg_1"}/> <span className="comment">(<FormattedMessage id={"empty_tape_value_msg_2"}/>)</span></div>
+              </label>
+            </div>
+
+            <div className='pad-15'>
+              <label className="sound-info-label">
+                <input 
+                  type="checkbox" 
+                  checked={this.state.continueFromStoppedSimulation} 
+                  onChange={this.handleContinueFromStoppedSimulationChange}
+                />
+                <span className="switch"></span>
+                <div className='switch-text'><FormattedMessage id={"continue_from_stopped_simulation"}/></div>
+              </label>
+            </div>
+
             {/* Seleção de Idioma */}
             <div className="pad-15">
               <label htmlFor="language-select" className="language-label">
@@ -231,18 +265,6 @@ class ConfigurationViewModal extends React.Component<any, State> {
                   {/* Adicione outros idiomas suportados com ícones apropriados */}
                 </select>
               </div>
-            </div>
-
-            <div className='pad-15'>
-              <label className="sound-info-label">
-                <input 
-                  type="checkbox" 
-                  checked={this.state.useEmptyTapeValue} 
-                  onChange={this.handleEmptyTapeValueChange}
-                />
-                <span className="switch"></span>
-                <div className='switch-text'>Usar valor vazio na fita como padrão <span className="comment">("B" também será considerado como vazio)</span></div>
-              </label>
             </div>
 
             <div className='pad-15'>

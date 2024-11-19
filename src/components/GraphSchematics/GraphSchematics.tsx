@@ -153,19 +153,17 @@ export default class GraphSchematics extends React.Component<{}, {
         if (vertices.length === 0) return;
 
         if (state) {
-          if (actualVertex === null) {
-            const initialVertex = vertices.reduce((minVertex: any, currentVertex: any) => {
-              return currentVertex.label < minVertex.label ? currentVertex : minVertex;
-            }, vertices[0]).id;
-            this.setState({ 
-              actualVertex: initialVertex,
-              vertexHistory: [initialVertex]
-            }, () => {
-              const currentVertex = vertices[0];
-              this.playVertexSound(currentVertex);
-              this.startTuringMachine();
-            });
-          }
+          const initialVertex = actualVertex ? actualVertex : vertices.reduce((minVertex: any, currentVertex: any) => {
+            return currentVertex.label < minVertex.label ? currentVertex : minVertex;
+          }, vertices[0]).id;
+          this.setState({ 
+            actualVertex: initialVertex,
+            vertexHistory: [initialVertex]
+          }, () => {
+            const currentVertex = vertices[0];
+            this.playVertexSound(currentVertex);
+            this.startTuringMachine();
+          });
         } else {
           this.stopMachine();
         }
@@ -307,9 +305,10 @@ export default class GraphSchematics extends React.Component<{}, {
   }
 
   startTuringMachine = () => {
+    const { config, headPosition } = this.state;
     this.setState({
       currentState: 0,
-      headPosition:  this.state.tape.length/2 - 2,
+      headPosition:  config.continueFromStoppedSimulation && headPosition ? headPosition : this.state.tape.length/2 - 2,
       isRunning: true,
     }, this.runMachine);
   };
@@ -322,10 +321,12 @@ export default class GraphSchematics extends React.Component<{}, {
       await new Promise(resolve => setTimeout(resolve, 500 / this.state.config.speed));
       const hasNextStep = this.moveToNextVertex();
       if (!hasNextStep) {
-        if (this.state.vertices.find(v => v.id === this.state.actualVertex)?.isFinal) {
-          GraphSchematicsManager.changeStatus("accepted");
-        } else {
-          GraphSchematicsManager.changeStatus("rejected");
+        if (hasNextStep !== undefined) {
+          if (this.state.vertices.find(v => v.id === this.state.actualVertex)?.isFinal) {
+            GraphSchematicsManager.changeStatus("accepted");
+          } else {
+            GraphSchematicsManager.changeStatus("rejected");
+          }
         }
         this.stopMachine();
         break;
@@ -334,7 +335,14 @@ export default class GraphSchematics extends React.Component<{}, {
   };
 
   stopMachine = () => {
-    this.setState({ isRunning: false });
+    const { config } = this.state;
+    if (config.continueFromStoppedSimulation) {
+      this.setState( { isRunning: false });
+      return;
+    }
+    const initialTapeSize = 1000;
+    const initialTape = Array(initialTapeSize).fill(config.useEmptyTapeValue ? "" : "0");
+    this.setState( { isRunning: false, actualVertex: null, tape: initialTape  });
   };
 
   private getTreatEmptyValue(e: any) {

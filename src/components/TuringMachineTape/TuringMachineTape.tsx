@@ -24,12 +24,24 @@ interface TuringMachineTapeState {
 
 const initialTapeSize = 1000;
 
+const CACHE_KEY = 'turingConfig';
+
 export default class TuringMachineTape extends React.Component<TuringMachineTapeProps> {
   initialTapeValue = Array(initialTapeSize).fill("0");
+
+  private static tapeSubject = new Subject();
+  private zerosToEmpty = (tape: string[]) => tape.map(e => e === "0" ? "" : e);
+  private loadFromCache = () => {
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) return JSON.parse(cached);
+      } finally {}
+      return null;
+  };
   
   state : TuringMachineTapeState  = {
     isPlaying: false,
-    tape: this.initialTapeValue,
+    tape: this.loadFromCache().useEmptyTapeValue ? this.zerosToEmpty(this.initialTapeValue): this.initialTapeValue,
     headPosition: 0,
     xTranslation: 0,
     isFinished: false,
@@ -37,26 +49,30 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
     useEmptyTapeValue: false
   };
 
-  private static tapeSubject = new Subject();
+  static onTapeChange() {
+    return TuringMachineTape.tapeSubject;
+  }
 
   componentDidMount() {
     TuringMachineTape.tapeSubject.next(this.initialTapeValue)
-    GraphSchematicsManager.onChangeHeadPositionAndTape().subscribe(obj => this.setState({headPosition: obj.headPosition, tape: obj.tape}));
+    GraphSchematicsManager.onChangeHeadPositionAndTape().subscribe(obj => {
+      this.setState({
+        headPosition: obj.headPosition, 
+        tape: obj.tape
+      });
+    });
     GraphSchematicsManager.onChangeStatus().subscribe(status => {
       this.setState({isFinished: status !== "neutral", isAccepted: status === "accepted"});
     })
     GraphSchematicsManager.onChangeConfig().subscribe(config => {
       const { tape } = this.state;
+      const newTapeObj = config.useEmptyTapeValue ? this.zerosToEmpty(tape) : this.initialTapeValue
+      TuringMachineTape.tapeSubject.next(newTapeObj)
       this.setState({ 
         useEmptyTapeValue: config.useEmptyTapeValue, 
-        tape: config.useEmptyTapeValue ? tape.map(e => e === "0" ? "" : e) : Array(initialTapeSize).fill("0")
+        tape: newTapeObj
       });
     });
-  }
-
-
-  static onTapeChange() {
-    return TuringMachineTape.tapeSubject;
   }
 
   clickLeft() {
@@ -84,8 +100,6 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
         <ScreenDisplayModal></ScreenDisplayModal>
         <DigitalNumbersDisplayModal></DigitalNumbersDisplayModal>
         <div className="turing-machine-tape--header">
-          {/* Header content if needed */}
-
           <div className={'turing-machine-tape--tape-status turing-machine-tape--tape-status-' + (isFinished ? (isAccepted ? "aceito" : "rejeitado"): "neutro") }>
             {
               isFinished ? 

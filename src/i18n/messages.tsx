@@ -79,6 +79,9 @@ export const messages: Record<Locale, {
   numeric_display: string;
   end_vertex: string;
   code_generation: string;
+  continue_from_stopped_simulation: string;
+  empty_tape_value_msg_1: string;
+  empty_tape_value_msg_2: string;
 }> = {
   'en': {
     add_vertex: "Add Vertex",
@@ -158,7 +161,10 @@ export const messages: Record<Locale, {
     drag_vertice_valid_area:  "You must drag the vertex to a valid area.",
     numeric_display: "Numeric Display",
     end_vertex: "Is it an End Vertex?",
-    code_generation: "Code Generation"
+    code_generation: "Code Generation",
+    continue_from_stopped_simulation: "Continue from where simulation stopped",
+    empty_tape_value_msg_1: "Use empty value on tape as default",
+    empty_tape_value_msg_2: "'B' will also be considered as empty"
   },
   'pt': {
     add_vertex: "Adicionar Vértice",
@@ -238,6 +244,9 @@ export const messages: Record<Locale, {
     drag_vertice_valid_area:  "Você deve arrastar o vértice para uma região válida.",
     numeric_display: "Display Numérico",
     end_vertex: "É Vert. Final?",
-    code_generation: "Geração de Código"
+    code_generation: "Geração de Código",
+    continue_from_stopped_simulation: "Continuar da onde parou na Simulação",
+    empty_tape_value_msg_1: "Usar valor vazio na fita como padrão",
+    empty_tape_value_msg_2: "'B' também será considerado como vazio"
   }
 };
