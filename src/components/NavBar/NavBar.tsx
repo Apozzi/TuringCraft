@@ -52,12 +52,21 @@ export default class NavBar extends React.Component<any> {
   };
 
   openExampleCiclicLoop = () => {
-    GraphSchematicsManager.loadGraphState({"offsetX":246,"offsetY":20,"width":1724,"height":1000,"scale":1,"vertices":[{"id":3,"x":773,"y":175,"label":"C","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":4,"x":777,"y":501,"label":"D","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":2,"x":416,"y":177,"label":"B","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":1,"x":414,"y":496,"label":"A","visitCount":19,"sound":{"type":"note","value":"A"},"isFinal":false}],"edges":[{"source":1,"target":2},{"source":2,"target":3},{"source":3,"target":4},{"source":4,"target":1}],"selectedVertex":null,"draggingVertex":false,"edgeCreationMode":false,"edgeStartVertex":null,"edgeWeights":{"1":{"2":[{"read":"0","write":"1","move":"R"}]},"2":{"3":[{"read":"0","write":"1","move":"L"}]},"3":{"4":[{"read":"1","write":"0","move":"R"}]},"4":{"1":[{"read":"1","write":"0","move":"L"}]}},"audioContext":{},"vertexHistory":[],"centroid":{"x":595,"y":337.25},"centroidUpdateCounter":76,"tape":Array(1000).fill("0"),"config":{"speed":1}});
+    const tape = Array(1000).fill("0");
+    tape[498] = "0"; tape[499] = "0"
+    GraphSchematicsManager.loadGraphState({"offsetX":246,"offsetY":20,"width":1724,"height":1000,"scale":1,"vertices":[{"id":3,"x":773,"y":175,"label":"C","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":4,"x":777,"y":501,"label":"D","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":2,"x":416,"y":177,"label":"B","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":1,"x":414,"y":496,"label":"A","visitCount":19,"sound":{"type":"note","value":"A"},"isFinal":false}],"edges":[{"source":1,"target":2},{"source":2,"target":3},{"source":3,"target":4},{"source":4,"target":1}],"selectedVertex":null,"draggingVertex":false,"edgeCreationMode":false,"edgeStartVertex":null,"edgeWeights":{"1":{"2":[{"read":"0","write":"1","move":"R"}]},"2":{"3":[{"read":"0","write":"1","move":"L"}]},"3":{"4":[{"read":"1","write":"0","move":"R"}]},"4":{"1":[{"read":"1","write":"0","move":"L"}]}},"audioContext":{},"vertexHistory":[],"centroid":{"x":595,"y":337.25},"centroidUpdateCounter":76,"tape":tape,"config":{"speed":1}});
   };
 
   openExampleBinaryCounter = () => {
     GraphSchematicsManager.loadGraphState({});
   };
+
+  openExampleBinaryPalindrome = () => {
+    const tape = Array(1000).fill("0");
+    tape[497] = "#"; tape[498] = "1"; tape[499] = "0"; tape[500] = "1"; tape[501] = "1"; tape[502] = "0"; tape[503] = "1"; tape[504] = "#";
+    GraphSchematicsManager.loadGraphState({"offsetX":79,"offsetY":23,"width":1541,"height":917,"scale":1,"vertices":[{"id":4,"x":782,"y":136,"label":"D","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":1,"x":345,"y":281,"label":"A","visitCount":4,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":3,"x":526,"y":447,"label":"C","visitCount":22,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":2,"x":518,"y":137,"label":"B","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":5,"x":781,"y":448,"label":"E","visitCount":7,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":6,"x":944,"y":291,"label":"F","visitCount":14,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":7,"x":336,"y":496,"label":"G","visitCount":1,"sound":{"type":"note","value":"A"},"isFinal":true}],"edges":[{"source":1,"target":2},{"source":1,"target":3},{"source":2,"target":2},{"source":3,"target":3},{"source":2,"target":4},{"source":3,"target":5},{"source":4,"target":6},{"source":5,"target":6},{"source":1,"target":7},{"source":4,"target":4},{"source":5,"target":5},{"source":6,"target":1},{"source":6,"target":6}],"selectedVertex":null,"draggingVertex":false,"edgeCreationMode":false,"edgeStartVertex":null,"edgeWeights":{"1":{"2":[{"read":"1","write":"B","move":"R"}],"3":[{"read":"0","write":"B","move":"R"}],"7":[{"read":"B","write":"B","move":"R"}]},"2":{"2":[{"read":"1","write":"1","move":"R"},{"read":"0","write":"0","move":"R"},{"read":"B","write":"B","move":"R"}],"4":[{"read":"#","write":"#","move":"L"}]},"3":{"3":[{"read":"1","write":"1","move":"R"},{"read":"0","write":"0","move":"R"},{"read":"B","write":"B","move":"R"}],"5":[{"read":"#","write":"#","move":"L"}]},"4":{"4":[{"read":"B","write":"B","move":"L"}],"6":[{"read":"1","write":"B","move":"L"}]},"5":{"5":[{"read":"B","write":"B","move":"L"}],"6":[{"read":"0","write":"B","move":"L"}]},"6":{"1":[{"read":"B","write":"B","move":"R"}],"6":[{"read":"1","write":"1","move":"L"},{"read":"0","write":"0","move":"L"}]}},"actualVertex":null,"audioContext":{},"vertexHistory":[],"backupInputTape":[],"centroid":{"x":617.6666666666666,"y":298.1666666666667},"centroidUpdateCounter":109,"tape":tape,"headPosition":498,"currentState":null,"isRunning":false,"config":{"speed":1,"offsetScreenDisplay":0,"useEmptyTapeValue":false}});
+    GraphSchematicsManager.changeHeadPositionAndTape(null, tape);
+  }
 
   render() {
     return (
@@ -100,6 +109,7 @@ export default class NavBar extends React.Component<any> {
           <div className="subnav--content">
             <a onClick={() => this.openExampleCiclicLoop()}><FormattedMessage id={"infinite_loop_example"}/></a>
             <a onClick={() => this.openExampleBinaryCounter()}><FormattedMessage id={"binary_counter_example"}/></a>
+            <a onClick={() => this.openExampleBinaryPalindrome()}>Detector de Palindroma Binária</a>
           </div>
         </div>
 
