@@ -15,7 +15,7 @@ You just need to create the graph, place the information on the tape and click o
 - Graphical analysis for better insights into computation.
 - Visual pixel display for tape segments.
 - Numeric display to represent binary numbers stored on the tape.
-- Save and load machine states to continue work seamlessly.
+- Save and load machine states to continue work.
 - Customize sounds for different machine states or actions.
 - Generate code for other Turing machine applications, such as [Turing Machine Simulator](https://turingmachinesimulator.com/).
 - Support for graph layout algorithms to visualize machine logic.
