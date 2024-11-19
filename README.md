@@ -2,6 +2,7 @@
 
 Turing Craft is Visual Simulator and Graph Creator for Turing Machines. Ideal for academic purposes, it allows students and researchers to design, simulate, and explore Turing machines.
 
+![Capturar](https://github.com/user-attachments/assets/f4cd6586-64ee-4329-a30e-956b2d6c5566)
 
 # Hot it work?
 
