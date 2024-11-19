@@ -8,7 +8,8 @@ Turing Craft is Visual Simulator and Graph Creator for Turing Machines. Perfect 
 
 You just need to create the graph, place the information on the tape and click on the green button to simulate.
 
-![a1](https://github.com/user-attachments/assets/34d64003-6cf2-4422-b0b6-591451997311)
+![a1](https://github.com/user-attachments/assets/983eb02d-766d-4ed1-9409-11120e8d24ab)
+
 
 # Features
 
