@@ -29,7 +29,7 @@ You just need to create the graph, place the information on the tape and click o
 
 # Execution
 
-To run locally, just install `npm run install` and then `npm run dev`. 
+To run locally, just install `npm install` and then `npm run dev`. 
 
 ## Author
 
