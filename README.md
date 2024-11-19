@@ -16,10 +16,14 @@ You just need to create the graph, place the information on the tape and click o
 - Visual pixel display for tape segments.
 - Numeric display to represent binary numbers stored on the tape.
 - Generate code for other turing machine aplications like "https://turingmachinesimulator.com/".
+- Graph Layout Algorithms.
 
 # Execution
 
 To run locally, just install `npm run install` and then `npm run dev`. 
+
 ## Author
 
 Anderson Pozzi (2024).
+
+This project is made using https://github.com/Apozzi/markov-builder-js as basis, 
