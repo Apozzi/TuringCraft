@@ -12,9 +12,10 @@ You just need to create the graph, place the information on the tape and click o
 
 # Other Features
 
-It's includes graphical analysis. Additionally, there visual display for tape segments and a numeric display to represent binary numbers stored on the tape.
-
-It's generated code for other turing machine aplications like "https://turingmachinesimulator.com/".
+- Graphical analysis.
+- Visual pixel display for tape segments.
+- Numeric display to represent binary numbers stored on the tape.
+- Generate code for other turing machine aplications like "https://turingmachinesimulator.com/".
 
 # Execution
 
