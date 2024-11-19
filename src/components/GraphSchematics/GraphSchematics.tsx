@@ -5,7 +5,7 @@ import AlphabetIterator from '../../utils/AlphabetIterator';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import SimulatorUtils from '../../utils/SimulatorUtils';
-import { NotaMusical, NOTE_FREQUENCIES } from '../../utils/NotasMusicaisEnum';
+import { NotaMusical, NOTE_FREQUENCIES } from '../../enums/NotasMusicaisEnum';
 import { AudioManager } from '../../utils/AudioManager';
 import { Vertex } from '../../interfaces/Vertex';
 import { Edge } from '../../interfaces/Edge';
@@ -474,8 +474,6 @@ export default class GraphSchematics extends React.Component<{}, {
       if (this.state.edgeStartVertex === null) {
         this.setState({ edgeStartVertex: id }, this.updateStateCallback);
       } else {
-        //this.addEdge(this.state.edgeStartVertex, id);
-        // aqui vai a modal
         AddEdgeModal.openModal({sourceId: this.state.edgeStartVertex, targetId: id});
       }
     } else {
@@ -704,7 +702,7 @@ export default class GraphSchematics extends React.Component<{}, {
           <circle 
             cx={0} 
             cy={0} 
-            r={vertexRadius * 0.8} // Adjust the size of the inner circle
+            r={vertexRadius * 0.8}
             fill="none" 
             stroke="white" 
             strokeWidth="2"

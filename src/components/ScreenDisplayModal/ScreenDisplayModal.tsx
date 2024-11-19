@@ -6,6 +6,7 @@ import Tippy from '@tippyjs/react';
 import TuringMachineTape from '../TuringMachineTape/TuringMachineTape';
 import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { colorMap, ColorValue } from '../../enums/ColorEnum';
 
 class ScreenDisplayModal extends React.Component<any> {
   static openSubject = new Subject();
@@ -44,18 +45,14 @@ class ScreenDisplayModal extends React.Component<any> {
     this.setState({ showModal: false });
   };
 
-  private getColor = (value: any) => {
-    if (value === 1) return 'white';
-    if (value === 2) return 'red';
-    if (value === 3) return 'green';
-    if (value === 4) return 'blue';
-    if (String(value).includes("#")) return value;
-    return '#ffffff00';
+  private getColor(value: ColorValue | string): string {
+    if (typeof value === 'string' && value.startsWith('#')) return value;
+    return colorMap[value as ColorValue] || '#ffffff00';
   }
 
   renderPixels = () => {
     const pixels = this.state.pixels.map((v, index) => (
-      <div key={index} className="pixel" style={{backgroundColor: this.getColor(v)}}></div>
+      <div key={index} className="pixel" style={{backgroundColor: this.getColor(v as ColorValue | string)}}></div>
     ));
 
     const rows = [];

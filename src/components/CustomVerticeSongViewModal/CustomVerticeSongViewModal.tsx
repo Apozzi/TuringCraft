@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import { Subject } from 'rxjs';
 import './CustomVerticeSongViewModal.css';
 import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
-import { NotaMusical } from '../../utils/NotasMusicaisEnum';
+import { NotaMusical } from '../../enums/NotasMusicaisEnum';
 import toast from 'react-hot-toast';
 import { Vertex } from '../../interfaces/Vertex';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -44,7 +44,6 @@ class CustomVerticeSongViewModal extends React.Component<any, State> {
 
   componentDidMount() {
     Modal.setAppElement('#app');
-
     GraphSchematicsManager.onChangeVerticeArray().subscribe((vertices: any) => {
       const selectedType: { [key: number]: 'note' | 'custom' } = {};
       const customUrls: { [key: number]: string } = {};
@@ -73,9 +72,7 @@ class CustomVerticeSongViewModal extends React.Component<any, State> {
     });
   }
 
-  handleCloseModal = () => {
-    this.setState({ showModal: false });
-  }
+  handleCloseModal = () => this.setState({ showModal: false });
 
   handleTypeChange = (vertexId: number, type: 'note' | 'custom') => {
     this.setState(prevState => ({

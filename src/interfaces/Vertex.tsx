@@ -1,4 +1,4 @@
-import { NotaMusical } from "../utils/NotasMusicaisEnum";
+import { NotaMusical } from "../enums/NotasMusicaisEnum";
 
 export interface Vertex {
     id: number;

@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import './CodeGenerationModal.css';
 import GraphSchematicsManager from '../GraphSchematics/GraphSchematicsManager';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import generateTuringMachineCode from '../../utils/turingCodeGenerator';
+import generateTuringMachineCode from '../../utils/TuringCodeGenerator';
 
 
 interface State {
@@ -37,8 +37,7 @@ class CodeGenerationModal extends React.Component<any, State> {
 
   componentDidMount() {
     Modal.setAppElement('#app');
-
-    CodeGenerationModal.openSubject.subscribe((obj) => {
+    CodeGenerationModal.openSubject.subscribe(() => {
       this.setState({ 
         showModal: true,
         generatedCode: generateTuringMachineCode(GraphSchematicsManager.getGraphState())

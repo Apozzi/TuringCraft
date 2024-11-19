@@ -23,7 +23,6 @@ interface TuringMachineTapeState {
 }
 
 const initialTapeSize = 1000;
-
 const CACHE_KEY = 'turingConfig';
 
 export default class TuringMachineTape extends React.Component<TuringMachineTapeProps> {

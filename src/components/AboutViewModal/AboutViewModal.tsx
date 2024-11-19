@@ -10,6 +10,10 @@ import { FormattedMessage } from 'react-intl';
 export default class AboutViewModal extends React.Component<any> {
   static openSubject = new Subject();
 
+  static openModal(obj: any) {
+    this.openSubject.next(obj);
+  }
+
   customStyles = {
     content : {
       height: '80%',
@@ -26,10 +30,6 @@ export default class AboutViewModal extends React.Component<any> {
     index: 0
   };
 
-  static openModal(obj: any) {
-    this.openSubject.next(obj);
-  }
-
 
   componentDidMount() {
     Modal.setAppElement('#app');
@@ -41,7 +41,6 @@ export default class AboutViewModal extends React.Component<any> {
   handleCloseModal () {
     this.setState({ showModal: false });
   }
-
 
   render() {
     return (

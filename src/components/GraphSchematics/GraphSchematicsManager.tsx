@@ -23,24 +23,24 @@ export default class GraphSchematicsManager {
   private static updateVerticeAndEdgesSubject = new Subject<any>();
   private static addAndApplyEdgeAndTransitionsSubject = new Subject<any>();
 
+  // Som e Configuração
   private static onActivateSongInfo = new Subject<any>();
   private static onChangeConfigSubject = new Subject<any>();
   private static onChangeHeadPositionAndTapeSubject = new Subject<any>();
 
-  //TODO - questoes que envolvem status
+  //Status
   private static onChangeStatusSubject = new Subject<any>();
 
+  // Controles
   private static offsetControlX = new Subject();
   private static offsetControlY = new Subject();
   private static offsetCenter = new Subject();
 
-  //
-
+  // Algoritmos de Layout
   private static applyFruchtermanReingoldSubject = new Subject<any>();
   private static applyKamadaKawaiSubject = new Subject<any>();
 
-  //
-
+  // Layout Adicionais
   private static applyCircularLayoutSubject = new Subject<any>();
   private static applyGridLayoutSubject = new Subject<any>();
   private static applyTreeLayoutSubject = new Subject<any>();
@@ -295,18 +295,41 @@ export default class GraphSchematicsManager {
     return GraphSchematicsManager.onActivateSongInfo;
   }
 
-  static unsubcribeSubjects() {
-    GraphSchematicsManager.addVertexSubject.unsubscribe();
-    GraphSchematicsManager.edgeCreationModeSubject.unsubscribe();
-    GraphSchematicsManager.edgeCreationModeSubject.unsubscribe();
-    GraphSchematicsManager.deleteEdgeSubject.unsubscribe();
-    GraphSchematicsManager.selectedVertexObjectSubject.unsubscribe();
-    GraphSchematicsManager.loadStateSubject.unsubscribe();
-    GraphSchematicsManager.isPlayingSubject.unsubscribe();
-    GraphSchematicsManager.offsetControlX.unsubscribe();
-    GraphSchematicsManager.offsetControlY.unsubscribe();
-    GraphSchematicsManager.changeStateSubject.unsubscribe();
-    GraphSchematicsManager.updateVerticeAndEdgesSubject.unsubscribe();
-  }
+  static unsubscribeSubjects() {
+    const subjects = [
+        this.addVertexSubject,
+        this.changeVertexSubject,
+        this.deleteEdgeSubject,
+        this.edgeCreationModeSubject,
+        this.exitCreationModeSubject,
+        this.selectedVertexObjectSubject,
+        this.changeVerticeArraySubject,
+        this.changeStateSubject,
+        this.isPlayingSubject,
+        this.resetAllSubject,
+        this.loadStateSubject,
+        this.updateVerticeAndEdgesSubject,
+        this.addAndApplyEdgeAndTransitionsSubject,
+        this.onActivateSongInfo,
+        this.onChangeConfigSubject,
+        this.onChangeHeadPositionAndTapeSubject,
+        this.onChangeStatusSubject,
+        this.offsetControlX,
+        this.offsetControlY,
+        this.offsetCenter,
+        this.applyFruchtermanReingoldSubject,
+        this.applyKamadaKawaiSubject,
+        this.applyCircularLayoutSubject,
+        this.applyGridLayoutSubject,
+        this.applyTreeLayoutSubject,
+        this.applyRadialLayoutSubject,
+        this.applySpectralLayoutSubject
+    ];
 
+    subjects.forEach(subject => {
+        if (subject) {
+            subject.unsubscribe();
+        }
+    });
+  }
 }
