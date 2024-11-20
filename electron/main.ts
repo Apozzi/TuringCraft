@@ -1,19 +1,29 @@
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow } from 'electron';
+import * as remote from '@electron/remote/main';
+
+remote.initialize();
+
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({
-    title: 'Turing Craft'
+    title: 'Turing Craft',
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true
+    }
   })
 
-  // You can use `process.env.VITE_DEV_SERVER_URL` when the vite command is called `serve`
+    //Menu.setApplicationMenu(null);
+
+  remote.enable(win.webContents);
+
+  // Rest of your existing code remains the same
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL)
   } else {
-    // Load your file
     win.loadFile('dist/index.html');
   }
 
-  Menu.setApplicationMenu(null);
-
   win.maximize();
 })
+

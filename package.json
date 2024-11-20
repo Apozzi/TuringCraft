@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@canvasjs/react-charts": "^1.0.2",
+    "@electron/remote": "^2.1.2",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
@@ -28,6 +29,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@electron/packager": "^18.3.6",
     "@eslint/js": "^9.9.0",
     "@types/canvasjs": "^1.9.11",
     "@types/react": "^18.3.3",

@@ -29,10 +29,50 @@ export default class NavBar extends React.Component<any, any> {
   private zerosToEmpty = (tape: string[]) => tape.map(e => e === "0" ? "" : e);
 
   saveGraph = () => {
+    const state = GraphSchematicsManager.getGraphState();
+    const jsonString = JSON.stringify(state);
+
+    // TODO: Fazer funcionar para save para aplicação desktop.
+    this.browserDownload(jsonString);
+  };
+
+  private desktopDownload = (jsonString: string) => {
+    /* 
+    dialog.showSaveDialog({
+    title: 'Select the File Path to save',
+    buttonLabel: 'Save',
+    // Restringindo o usuário apenas a arquivos de texto
+    filters: [
+      {
+        name: 'Text Files',
+        extensions: ['txt', 'docx']
+      }
+    ],
+    properties: []
+  })
+    .then((file: any) => {
+      // Verifica se a operação foi cancelada
+      console.log(file.canceled);
+      if (!file.canceled && file.filePath) {
+        console.log(file.filePath.toString());
+
+        // Criando e escrevendo no arquivo sample.txt
+        fs.writeFile(file.filePath.toString(), 'This is a Sample File', (err) => {
+          if (err) throw err;
+          console.log('Saved!');
+        });
+      }
+    })
+    .catch((err: any) => {
+      console.error(err);
+    });
+    */
+  };
+  
+  private browserDownload = (jsonString: string) => {
     const fileName = prompt('Digite o nome do arquivo para salvar:', 'graph_state.json');
     if (!fileName) return;
-    let state = GraphSchematicsManager.getGraphState()
-    const jsonString = JSON.stringify(state);
+    
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
