@@ -35,6 +35,8 @@ Firstly you must vite installed `npm install -D vite`
 
 To run locally, just install `npm install` and then `npm run dev`. 
 
+
+
 ### Desktop (Electron)
 
 To execute via desktop you must create a build `npm run build` it will be generated `dist-electron`, 
