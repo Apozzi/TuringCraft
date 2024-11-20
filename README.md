@@ -29,7 +29,16 @@ You just need to create the graph, place the information on the tape and click o
 
 # Execution
 
+Firstly you must vite installed `npm install -D vite`
+
+### Web
+
 To run locally, just install `npm install` and then `npm run dev`. 
+
+### Desktop (Electron)
+
+To execute via desktop you must create a build `npm run build` it will be generated `dist-electron`, 
+after that just `npm run electron`. 
 
 ## Author
 
