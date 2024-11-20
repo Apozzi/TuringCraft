@@ -40,7 +40,7 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
   
   state : TuringMachineTapeState  = {
     isPlaying: false,
-    tape: this.loadFromCache().useEmptyTapeValue ? this.zerosToEmpty(this.initialTapeValue): this.initialTapeValue,
+    tape: this.loadFromCache()?.useEmptyTapeValue ? this.zerosToEmpty(this.initialTapeValue): this.initialTapeValue,
     headPosition: 0,
     xTranslation: 0,
     isFinished: false,
