@@ -49,4 +49,4 @@ Anderson Pozzi (2024).
 This project is made using my project https://github.com/Apozzi/markov-builder-js as basis,
 If you are interested, take a look.
 
-- TODO - Adjust file saving in electron (desktop)
+- TODO - Adjust file saving in electron (desktop).
