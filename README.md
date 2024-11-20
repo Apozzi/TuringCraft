@@ -33,7 +33,7 @@ Firstly you must vite installed `npm install -D vite`
 
 ## Web
 
-To run locally, just install `npm install` and then `npm run dev`. 
+To run locally, just install the dependencies via `npm install` and then `npm run dev`. 
 
 
 
