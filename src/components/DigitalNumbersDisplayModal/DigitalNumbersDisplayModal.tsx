@@ -26,7 +26,7 @@ class DigitalNumbersDisplayModal extends React.Component<any> {
     });
     TuringMachineTape.onTapeChange().subscribe((tape: any) => {
       let indexZero = tape.length/2 - 2
-      let decimal = parseInt(tape.slice(indexZero, indexZero + 7).reverse().join(""), 2);
+      let decimal = parseInt(tape.slice(indexZero, indexZero + 7).filter((e:any) => !isNaN(e)).join(""), 2);
       this.setState({ number:  decimal < 100 ? String(decimal).padStart(2, '0') : "--"});
     });
   }

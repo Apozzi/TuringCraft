@@ -59,6 +59,7 @@ export default class TuringMachineTape extends React.Component<TuringMachineTape
   componentDidMount() {
     TuringMachineTape.tapeSubject.next(this.initialTapeValue)
     GraphSchematicsManager.onChangeHeadPositionAndTape().subscribe(obj => {
+      TuringMachineTape.tapeChange(obj.tape);
       this.setState({
         headPosition: obj.headPosition, 
         tape: obj.tape
