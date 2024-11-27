@@ -130,7 +130,9 @@ export default class NavBar extends React.Component<any, any> {
   };
 
   openExampleBinaryCounter = () => {
-    GraphSchematicsManager.loadGraphState({});
+    const tape = this.getEmptyTape();
+    tape[504] = "#";
+    this.loadExample(tape, {"offsetX":47,"offsetY":26,"width":1724,"height":1000,"scale":1,"vertices":[{"id":1,"x":484,"y":324,"label":"A","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false},{"id":2,"x":822,"y":323,"label":"B","visitCount":0,"sound":{"type":"note","value":"A"},"isFinal":false}],"edges":[{"source":1,"target":1},{"source":1,"target":2},{"source":2,"target":2},{"source":2,"target":1}],"selectedVertex":null,"draggingVertex":false,"edgeCreationMode":false,"edgeStartVertex":null,"edgeWeights":{"1":{"1":[{"read":"0","write":"0","move":"R"},{"read":"1","write":"1","move":"R"}],"2":[{"read":"#","write":"#","move":"L"}]},"2":{"1":[{"read":"0","write":"1","move":"R"}],"2":[{"read":"1","write":"0","move":"L"}]}},"audioContext":{},"vertexHistory":[],"tape":tape, "backupInputTape":tape,"config":{"speed":1,"offsetScreenDisplay":0}});
   };
 
   openExampleBinaryPalindrome = () => {
